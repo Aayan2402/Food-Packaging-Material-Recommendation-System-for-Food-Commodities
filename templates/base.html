@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'en') }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ t('app_name') }} - {{ t('hero_title') }}</title>
+  <meta name="description" content="{{ t('hero_subtitle') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- Favicon / Brand SVG -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/packsense_icon.svg') }}">
+  <link rel="stylesheet" href="/packsense-chatbot/chatbot.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="mainNavbar">
+    <div class="nav-container">
+      <a href="{{ url_for('index', lang=active_lang) }}" class="brand-wrapper" id="brandLink" title="PackSense AI">
+        <img src="{{ url_for('static', filename='img/packsense_icon.svg') }}" alt="PackSense AI Logo" width="44" height="44" style="display: block; width: 44px; height: 44px; flex-shrink: 0;">
+        <div class="brand-name">
+          <span class="brand-pack">Pack</span><span class="brand-sense">Sens<span style="position: relative; display: inline-block;">e<svg width="10" height="10" viewBox="0 0 10 10" style="position: absolute; top: -1px; right: -1px;"><path d="M1 9 C1 4 4 1 9 1 C9 6 6 9 1 9 Z" fill="#4ade80"/></svg></span></span>
+          <span class="brand-ai-badge">AI</span>
+        </div>
+      </a>
+
+      <!-- Main Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">{{ t('nav_home') }}</a></li>
+        <li><a href="{{ url_for('workspace', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'workspace' %}active{% endif %}">{{ t('nav_workspace') }}</a></li>
+        <li><a href="{{ url_for('packaudit', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'packaudit' %}active{% endif %}">{{ t('nav_packaudit') }}</a></li>
+        <li><a href="{{ url_for('history', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">{{ t('nav_history') }}</a></li>
+        <li><a href="{{ url_for('about', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">{{ t('nav_about') }}</a></li>
+        <li><a href="{{ url_for('chatbot', lang=active_lang) }}" class="nav-link {% if request.endpoint == 'chatbot' %}active{% endif %}" style="color: #4ade80; font-weight: 700;">🤖 Ask PackSense AI</a></li>
+      </ul>
+
+      <!-- Right Navigation Actions: GB English Dropdown, Farmer/Industry Toggle, Ayan Profile Pill, Logout Icon -->
+      <div class="nav-right-actions">
+        <!-- 1. Language Dropdown Button: All 21 Global and Country Languages -->
+        <div class="lang-dropdown-wrapper" id="langDropdownWrapper">
+          <button type="button" class="headline-lang-btn" id="langDropdownToggle" onclick="toggleHeadlineLang(event)" title="{{ t('language_select') }}">
+            <span class="lang-code">{{ current_lang_info.country if current_lang_info else 'GB' }}</span>
+            <span class="lang-name">{{ current_lang_info.native if current_lang_info else 'English' }}</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="headline-lang-menu" id="headlineLangMenu" style="max-height: 400px; overflow-y: auto; min-width: 260px; box-shadow: 0 16px 36px rgba(0,0,0,0.5); border: 1px solid #1f354f;">
+            <div style="padding: 0.5rem 0.85rem 0.35rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08);">
+              21 Country Languages
+            </div>
+            {% for code, lang_item in supported_languages.items() %}
+              <a href="{{ url_for('set_language', lang=code, next=request.full_path) }}" class="lang-menu-item {% if active_lang == code %}active{% endif %}" onclick="handleLanguageSwitch('{{ code }}')" style="display: flex; align-items: center; justify-content: space-between; padding: 0.55rem 0.9rem; text-decoration: none;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span class="lang-code" style="font-size: 0.72rem; padding: 0.15rem 0.35rem; border-radius: 4px; font-weight: 800; min-width: 28px; text-align: center;">{{ lang_item.country }}</span>
+                  <span style="font-weight: 600; font-size: 0.86rem; color: #f8fafc;">{{ lang_item.native }}</span>
+                </div>
+                <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 0.5rem;">{{ lang_item.name }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if current_user and current_user.id %}
+        <!-- User Profile Pill: 👤 User -->
+        <a href="{{ url_for('profile', lang=active_lang) }}" class="headline-user-pill" id="headlineUserPill" title="View Profile: {{ current_user.name }}">
+          <svg class="user-pill-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="user-pill-name">{{ (current_user.name.split(' ')[0] if current_user and current_user.name else 'User') }}</span>
+        </a>
+
+        <!-- Logout / Exit Arrow Icon Button -->
+        <a href="{{ url_for('logout', lang=active_lang) }}" class="headline-logout-btn" id="headlineLogoutBtn" title="{{ t('nav_logout') }}" onclick="handleLogout(event)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </a>
+        {% else %}
+        <!-- Dynamic Login Option when Logged Out -->
+        <a href="{{ url_for('login', lang=active_lang) }}" class="headline-user-pill" id="headlineLoginBtn" style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: #ffffff;" title="{{ t('nav_login') }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <span class="user-pill-name" style="color: #ffffff; font-weight: 700;">{{ t('nav_login') }}</span>
+        </a>
+        {% endif %}
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu(event)" aria-label="Toggle navigation menu" style="display: none; background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 0.35rem 0.5rem; border-radius: var(--radius-sm); cursor: pointer; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="max-width: 1280px; margin: 1rem auto 0; padding: 0 1.5rem;">
+        {% for category, msg in messages %}
+          <div style="padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 0.75rem; font-size: 0.9rem; font-weight: 600; 
+            {% if category == 'error' %} background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;
+            {% elif category == 'success' %} background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0;
+            {% else %} background: #f0f9ff; color: #075985; border: 1px solid #bae6fd; {% endif %}">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Page Content -->
+  <main style="flex: 1;">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <img src="{{ url_for('static', filename='img/packsense_icon.svg') }}" alt="PackSense AI" width="40" height="40" style="display: block;">
+          <div style="font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; display: flex; align-items: center; line-height: 1;">
+            <span style="color: #ffffff;">Pack</span><span style="color: #22c55e;">Sens<span style="position: relative; display: inline-block;">e<svg width="8" height="8" viewBox="0 0 10 10" style="position: absolute; top: 1px; right: 0;"><path d="M1 9 C1 4 4 1 9 1 C9 6 6 9 1 9 Z" fill="#4ade80"/></svg></span></span>
+            <span class="brand-ai-badge" style="font-size: 0.68rem; padding: 0.12rem 0.4rem; margin-left: 0.35rem;">AI</span>
+          </div>
+        </div>
+        <p style="color: #38bdf8; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.65rem;">
+          SMART PACKAGING <span style="color: #22c55e; margin: 0 2px;">•</span> HEALTHIER FOOD <span style="color: #22c55e; margin: 0 2px;">•</span> BRIGHTER TOMORROW
+        </p>
+        <p style="color: #94a3b8; font-weight: 400; line-height: 1.5; font-size: 0.85rem; max-width: 480px;">
+          {{ t('academic_disclaimer') }}
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <h4>{{ t('nav_home') }}</h4>
+        <ul>
+          <li><a href="{{ url_for('workspace', lang=active_lang) }}">{{ t('nav_workspace') }}</a></li>
+          <li><a href="{{ url_for('packaudit', lang=active_lang) }}">{{ t('nav_packaudit') }}</a></li>
+          <li><a href="{{ url_for('history', lang=active_lang) }}">{{ t('nav_history') }}</a></li>
+          <li><a href="{{ url_for('about', lang=active_lang) }}">{{ t('nav_about') }}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Technology & Standards</h4>
+        <ul>
+          <li><span style="color: #cbd5e1;">Python & Flask Engine</span></li>
+          <li><span style="color: #cbd5e1;">SQLite Relational DB</span></li>
+          <li><span style="color: #cbd5e1;">ASTM D3985 (OTR)</span></li>
+          <li><span style="color: #cbd5e1;">ASTM F1249 (WVTR)</span></li>
+          <li><span style="color: #cbd5e1;">SIH Problem Statement 236</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 PackSense AI. Designed for Smart Indian Agro-Logistics.</div>
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <span style="font-weight: 600;">{{ t('language_select') }}:</span>
+        <a href="{{ url_for('set_language', lang='en', next=request.full_path) }}" onclick="handleLanguageSwitch('en')" style="color: inherit; text-decoration: underline;">English</a> |
+        <a href="{{ url_for('set_language', lang='hi', next=request.full_path) }}" onclick="handleLanguageSwitch('hi')" style="color: inherit; text-decoration: underline;">हिंदी</a> |
+        <a href="{{ url_for('set_language', lang='mr', next=request.full_path) }}" onclick="handleLanguageSwitch('mr')" style="color: inherit; text-decoration: underline;">मराठी</a> |
+        <a href="{{ url_for('set_language', lang='gu', next=request.full_path) }}" onclick="handleLanguageSwitch('gu')" style="color: inherit; text-decoration: underline;">ગુજરાતી</a> |
+        <a href="{{ url_for('set_language', lang='es', next=request.full_path) }}" onclick="handleLanguageSwitch('es')" style="color: inherit; text-decoration: underline;">Español</a> |
+        <a href="javascript:void(0)" onclick="toggleHeadlineLang(event)" style="color: #00c875; text-decoration: underline; font-weight: 700;">+21 All Languages</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- PDF Export & Print Engine -->
+  <script src="{{ url_for('static', filename='js/html2pdf.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pdf_export.js') }}"></script>
+
+  <script>
+    function handleLanguageSwitch(lang) {
+      try {
+        localStorage.setItem('packsense_lang', lang);
+        document.cookie = "packsense_lang=" + lang + "; path=/; max-age=2592000; SameSite=Lax";
+      } catch (e) {}
+    }
+
+    // Headline Language Dropdown Handler
+    function toggleHeadlineLang(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const btn = document.getElementById('langDropdownToggle');
+      const menu = document.getElementById('headlineLangMenu');
+      if (menu) {
+        menu.classList.toggle('show');
+        if (btn) btn.classList.toggle('open');
+      }
+    }
+
+    function toggleMobileMenu(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const links = document.querySelector('.nav-links');
+      if (links) {
+        links.classList.toggle('mobile-open');
+      }
+    }
+
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('headlineLangMenu');
+      const btn = document.getElementById('langDropdownToggle');
+      if (menu && menu.classList.contains('show')) {
+        if (!menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+          menu.classList.remove('show');
+          if (btn) btn.classList.remove('open');
+        }
+      }
+    });
+
+    // Resilient Logout Handler
+    function handleLogout(e) {
+      try {
+        localStorage.removeItem('packsense_user_id');
+        sessionStorage.clear();
+        document.cookie = "packsense_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax";
+        document.cookie = "packsense_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      } catch (err) {
+        console.error("Logout cleanup error:", err);
+      }
+    }
+
+    // PackSense Localization & Navigation Sync
+    (function() {
+      const active = "{{ active_lang }}";
+      if (active) {
+        try {
+          localStorage.setItem('packsense_lang', active);
+          document.cookie = "packsense_lang=" + active + "; path=/; max-age=2592000; SameSite=Lax";
+        } catch (e) {}
+      }
+      
+      // Keep internal links synchronized with selected language
+      if (active && active !== 'en') {
+        document.querySelectorAll('a').forEach(function(el) {
+          const href = el.getAttribute('href');
+          if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('javascript:') && !href.includes('/set_language/')) {
+            if (!href.includes('lang=')) {
+              const delimiter = href.includes('?') ? '&' : '?';
+              el.setAttribute('href', href + delimiter + 'lang=' + encodeURIComponent(active));
+            }
+          }
+        });
+      }
+    })();
+  </script>
+
+  <!-- Global Floating Ask PackSense AI Button -->
+  {% if request.endpoint != 'chatbot' %}
+  <a href="{{ url_for('chatbot', lang=active_lang) }}" class="packsense-floating-chat-trigger" title="Ask PackSense AI – Food Safety Assistant">
+    <div class="floating-trigger-pulse"></div>
+    <span>🤖 Ask PackSense AI</span>
+  </a>
+  {% endif %}
+</body>
+</html>

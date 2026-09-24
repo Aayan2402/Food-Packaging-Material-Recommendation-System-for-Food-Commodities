@@ -1,0 +1,52 @@
+{
+  "official_sources": [
+    {
+      "id": "fssai_pkg_2018",
+      "title": "Food Safety and Standards (Packaging) Regulations, 2018",
+      "issuing_body": "Food Safety and Standards Authority of India (FSSAI), Ministry of Health and Family Welfare, Govt. of India",
+      "notification_reference": "File No. 1-95/Stds/Packaging/SP(L&C/A)/FSSAI-2017",
+      "gazette_date": "24th December, 2018 (Effective 1st July, 2019)",
+      "official_portal": "https://www.fssai.gov.in",
+      "key_sections": [
+        "Regulation 3: General Requirements (Sub-clause 4 explicitly bans newspaper use)",
+        "Regulation 4: Specific Requirements for Primary Food Packaging",
+        "Schedule I & II: Lists of prescribed BIS standards for paper, plastics, glass, and metal",
+        "Schedule III & IV: Migration testing protocols and overall migration limits (60 mg/kg)"
+      ]
+    },
+    {
+      "id": "fssai_labelling_2020",
+      "title": "Food Safety and Standards (Labelling and Display) Regulations, 2020",
+      "issuing_body": "FSSAI, Government of India",
+      "notification_reference": "F. No. 1-94/FSSAI/SP(L&C/A)/2009",
+      "official_portal": "https://www.fssai.gov.in",
+      "key_sections": [
+        "Mandatory FSSAI logo and 14-digit license number display",
+        "Nutritional facts declaration per 100g or 100ml",
+        "Date marking: 'Date of manufacture' and 'Expiry date' / 'Use by'",
+        "Allergen warnings and declarations"
+      ]
+    },
+    {
+      "id": "maharashtra_fda_enforcement",
+      "title": "Food and Drug Administration (FDA) Maharashtra Official Portal",
+      "issuing_body": "Government of Maharashtra",
+      "official_portal": "https://fda.maharashtra.gov.in",
+      "mandate": "Enforcement of the Food Safety and Standards Act, 2006, state sampling, anti-adulteration drives, licensing and inspections across Maharashtra districts."
+    },
+    {
+      "id": "bis_is_9845",
+      "title": "IS 9845:2020 — Method of Analysis for the Determination of Overall Migration of Constituents of Plastics Materials",
+      "issuing_body": "Bureau of Indian Standards (BIS)",
+      "standard_code": "IS 9845",
+      "scope": "Prescribes analytical methods using distilled water, 3% acetic acid, ethanol, and rectified olive oil/iso-octane at specified temperatures to verify non-toxicity of food packaging."
+    },
+    {
+      "id": "bis_is_6615",
+      "title": "IS 6615: Paper for Packaging and Wrapping — Specification",
+      "issuing_body": "Bureau of Indian Standards (BIS)",
+      "standard_code": "IS 6615",
+      "scope": "Specifications for food-contact paper, grease resistance, bursting strength, and permissible toxic substance thresholds."
+    }
+  ]
+}

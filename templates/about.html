@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 3rem auto 5rem; padding: 0 1.5rem;">
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <div class="hero-badge">
+      SIH Problem Statement 236 • Technical Documentation
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+      <h1 style="font-size: 2.5rem; font-weight: 900; color: var(--deep-navy); letter-spacing: -0.02em; margin: 0;">
+        About PackSense AI
+      </h1>
+      <span class="brand-ai-badge" style="background: #000000; color: #ffffff; padding: 0.2rem 0.65rem; border-radius: 8px; font-size: 0.85rem; font-weight: 900;">
+        AI
+      </span>
+    </div>
+    <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 680px; margin: 0 auto 1.75rem; line-height: 1.6;">
+      AI-Based Intelligent Food Packaging Material Recommendation System for Food Commodities.
+    </p>
+
+    <!-- Official PackSense AI Logo Emblem with matching headline typography -->
+    <div style="display: flex; justify-content: center; margin: 1.5rem auto 0.5rem;">
+      <img src="{{ url_for('static', filename='img/packsense_logo.svg') }}" alt="PackSense AI" style="max-width: 280px; width: 100%; height: auto; filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.07));">
+    </div>
+  </div>
+
+  <!-- Dedicated AI Food Safety & Regulatory Assistant Banner -->
+  <div style="background: linear-gradient(135deg, #0b1626 0%, #162a45 100%); border: 1.5px solid #10b981; border-radius: var(--radius-md); padding: 1.75rem 2rem; margin-bottom: 2rem; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+    <div style="max-width: 680px;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+        <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #4ade80; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+          REGULATORY FOOD SAFETY INTELLIGENCE
+        </span>
+        <span style="color: #38bdf8; font-size: 0.8rem; font-weight: 700;">FSSAI 2018 &bull; FDA Maharashtra &bull; BIS Standards</span>
+      </div>
+      <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 0.4rem; color: #ffffff;">
+        🤖 PackSense AI – Food Safety Assistant
+      </h3>
+      <p style="font-size: 0.885rem; color: #94a3b8; margin: 0; line-height: 1.5;">
+        “Ask about Food Packaging, FSSAI & FDA Food-Safety Requirements”. Get instant educational guidance on newspaper wrapping bans, migration limits, food-grade materials, oily/milk packaging, and Maharashtra FDA context.
+      </p>
+    </div>
+    <div>
+      <a href="{{ url_for('chatbot', lang=active_lang) }}" class="btn-primary" style="text-decoration: none; padding: 0.85rem 1.6rem; font-size: 0.95rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
+        <span>🤖 Ask PackSense AI</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Section 1: The Problem & The Mission -->
+  <div class="channel-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 1rem;">
+      1. Background & SIH Problem Statement 236
+    </h2>
+    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7; margin-bottom: 1rem;">
+      In India, an estimated <strong>16% of fruits and vegetables and over 10% of oilseeds and dairy</strong> are lost along the post-harvest supply chain between farm gate and retail consumer. A major driver of this catastrophic waste is <em>sub-optimal, unscientific, or one-size-fits-all packaging</em>: farmers and small-to-medium enterprises (SMEs) routinely package breathing fresh produce into airtight polythene bags (inducing suffocation and fungal mold), or transport fried snacks in single-layer films with zero UV or oxygen barriers.
+    </p>
+    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7;">
+      <strong>PackSense AI</strong> solves this fundamental challenge by combining food biochemical science, dynamic Indian highway transit climate stress models, and a multi-variable constraint optimization algorithm to output mathematically verified, sustainable packaging recommendations.
+    </p>
+  </div>
+
+  <!-- Section 2: Biochemical Decay Mechanics -->
+  <div class="channel-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 1rem;">
+      2. Food Science & Biochemical Decay Triggers
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+      <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 1.25rem;">
+        <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">🍓 Respiration & Transpiration</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Fresh fruits continue to respire after harvest (consuming O₂ and producing CO₂). Airtight barriers trigger anaerobic fermentation; excessive moisture leads to water droplet sweating and gray mold (Botrytis).
+        </p>
+      </div>
+
+      <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 1.25rem;">
+        <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">🥔 Lipid Oxidation & Free Radicals</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Snacks with 25-38% free fat develop pungent off-flavors (hexanals) when exposed to oxygen and light. They require metallized barrier films with near-zero OTR and UV blocking.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 1.25rem;">
+        <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">🧀 High Water Activity (aw > 0.95)</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Perishable dairy products (paneer, cheese) and meat are susceptible to psychrotrophic bacterial growth and mold slime. They mandate hermetic EVOH vacuum sealing or active MAP gas.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Dual-Mode Architecture -->
+  <div class="channel-card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); margin: 0;">
+        3. Dual-Mode Architecture: Farmer vs Industry Differentiation
+      </h2>
+      <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: 700;">
+        Unique Information Tailoring Verified
+      </span>
+    </div>
+    
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+      PackSense AI dynamically adapts both its computational engine and its visual packaging inspection (Channel B PackAudit) based on the user's role. Below is the structural difference between what a farmer sees versus what a laboratory engineer receives for the exact same packaging image:
+    </p>
+
+    <!-- Side-by-Side Comparison Cards -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+      <div style="border: 2px solid #86efac; background: #f0fdf4; border-radius: var(--radius-sm); padding: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span style="background: #166534; color: #ffffff; font-size: 0.8rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+            👨‍🌾 FARMER / SME MODE
+          </span>
+          <span style="font-size: 0.75rem; color: #15803d; font-weight: 700;">Ground-Level Mandi Protection</span>
+        </div>
+        <p style="font-size: 0.875rem; color: #166534; line-height: 1.5; margin-bottom: 1rem;">
+          Designed for farmers, crate packers, and mandi traders with zero technical jargon. Input requires only the crop, destination, and transit duration.
+        </p>
+        <h4 style="font-size: 0.85rem; font-weight: 800; color: #14532d; margin-bottom: 0.4rem;">
+          📸 Image Analysis Information (Channel B):
+        </h4>
+        <ul style="font-size: 0.825rem; color: #15803d; padding-left: 1.2rem; margin: 0; line-height: 1.5;">
+          <li><strong>Package Detection:</strong> Identifies unvented bags, farm crates, gunny sacks, or clear fruit boxes.</li>
+          <li><strong>Mandi Rot & Spoilage Risk:</strong> Detects trapped sweat droplets, rotting mold hazards, and bruising.</li>
+          <li><strong>Actionable Low-Cost Fix:</strong> Clear farm advice (e.g. punch 4–6 breather holes, add cardboard cushion).</li>
+          <li><strong>Financial Impact:</strong> Calculates rupees saved per quintal batch from prevented mandi rejection.</li>
+          <li><strong>Mandi Grade:</strong> Preserves firm texture to achieve Grade A market pricing.</li>
+        </ul>
+      </div>
+
+      <div style="border: 2px solid #93c5fd; background: #eff6ff; border-radius: var(--radius-sm); padding: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <span style="background: #1e40af; color: #ffffff; font-size: 0.8rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+            🔬 INDUSTRY / LAB MODE
+          </span>
+          <span style="font-size: 0.75rem; color: #1d4ed8; font-weight: 700;">Certified ASTM Standards & R&D</span>
+        </div>
+        <p style="font-size: 0.875rem; color: #1e3a8a; line-height: 1.5; margin-bottom: 1rem;">
+          Engineered for food technologists, packaging R&D labs, and QA inspectors requiring ASTM compliance metrics and resin optimization.
+        </p>
+        <h4 style="font-size: 0.85rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.4rem;">
+          📸 Image Analysis Information (Channel B):
+        </h4>
+        <ul style="font-size: 0.825rem; color: #1e40af; padding-left: 1.2rem; margin: 0; line-height: 1.5;">
+          <li><strong>Polymer Classification:</strong> Distinguishes Monolayer LDPE, Metallized BOPP, APET, or co-ex EVOH.</li>
+          <li><strong>Optical Spectroscopy:</strong> Measures Specular Glint %, Optical Transmission Haze, and Sobel edge density.</li>
+          <li><strong>Seal Integrity & Rheology:</strong> Evaluates ASTM F88 tensile crimp peel margin (N/15mm) and micro-voids.</li>
+          <li><strong>ASTM Standards Audit:</strong> ASTM D3985 (OTR) and ASTM F1249 (WVTR) barrier gap quantification.</li>
+          <li><strong>Machine Parameters:</strong> Specific sealing bar temperatures (°C), dwell times (s), and down-gauging %.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Comparative Matrix Table -->
+    <div style="overflow-x: auto; margin-top: 1rem;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-sm);">
+        <thead>
+          <tr style="background: #0f172a; color: #ffffff; text-align: left;">
+            <th style="padding: 0.75rem 1rem;">Inspection Feature</th>
+            <th style="padding: 0.75rem 1rem; color: #86efac;">👨‍🌾 Farmer / SME Mode Output</th>
+            <th style="padding: 0.75rem 1rem; color: #93c5fd;">🔬 Industry / Lab Mode Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Image Packaging Detection</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">"Thin grocery plastic bag without ventilation holes"</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">"Monolayer Low-Density Polyethylene (LDPE blown web)"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Vulnerability Diagnostic</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">"Sweat drops collect on inside walls; fruit rots in 24 hours"</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">"Non-perforated; violates respiration OTR threshold, triggering Botrytis"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Computer Vision Metrics</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">Vulnerability rating (1–10) with Rot Risk Warning</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">Glint Reflectivity %, Opacity Haze %, Sobel Edge Density</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Seal Quality Assessment</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">"Weak closure; air leaks inside during bumpy travel"</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">"ASTM F88 non-compliant (< 6.0 N/15mm; seal dwell cold-flow leakage)"</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Actionable Recommendation</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">"Punch 4–6 round holes or use plastic punnet with paper cushion"</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">"Deploy micro-perforated APET tray with anti-fog top web (135°C @ 2.2 bar)"</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.75rem 1rem; font-weight: 700; color: var(--deep-navy);">Economic & Sustainability Output</td>
+            <td style="padding: 0.75rem 1rem; color: #166534;">"Saves ~₹2,500/quintal; protects Grade A mandi price"</td>
+            <td style="padding: 0.75rem 1rem; color: #1e40af;">"25% resin down-gauging; OTR: 2,500 cc/m²/day; -28% CO₂ footprint"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 4: Indian Logistics & Climate Stress Calibration -->
+  <div class="channel-card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 1rem;">
+      4. Indian Logistics & Climate Stress Multiplier
+    </h2>
+    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.7;">
+      Standard laboratory testing assumes steady 23°C and 50% relative humidity. In India, however, a truck travelling from <em>Pune to Chennai during the monsoon</em> experiences 88% relative humidity and 36°C ambient heat for 4 days on open highways. PackSense AI computes a <strong>Dynamic Climate Stress Score</strong> using regional meteorological databases and transit shock estimates to automatically tighten moisture and oxygen barrier targets.
+    </p>
+  </div>
+
+  <!-- Academic Disclaimer Box -->
+  <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 1.5rem; text-align: center;">
+    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--deep-navy); margin-bottom: 0.25rem;">
+      Academic & Prototyping Disclaimer
+    </h4>
+    <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 720px; margin: 0 auto; line-height: 1.5;">
+      {{ t('academic_disclaimer') }} Algorithms and database schemas are developed to demonstrate computational food science principles for the Smart India Hackathon.
+    </p>
+  </div>
+</div>
+{% endblock %}

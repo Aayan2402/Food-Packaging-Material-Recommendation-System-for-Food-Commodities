@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Background glow & lighting -->
+    <radialGradient id="ambientGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#e6f7f2" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#f8fafc" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Digital Globe Hologram Gradient -->
+    <radialGradient id="globeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#0284c7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Box Materials -->
+    <linearGradient id="boxTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="boxLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="boxRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#0f532b"/>
+    </linearGradient>
+
+    <!-- Bio Leaf Gradients -->
+    <linearGradient id="leafGradPrimary" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="40%" stop-color="#22c55e"/>
+      <stop offset="80%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+    <linearGradient id="leafGradDark" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#14532d"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+
+    <!-- AI Microchip Gradients -->
+    <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#082f49"/>
+    </linearGradient>
+    <filter id="chipGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Vegetable Gradients -->
+    <radialGradient id="tomatoGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="40%" stop-color="#ef4444"/>
+      <stop offset="90%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </radialGradient>
+    <radialGradient id="pepperGrad" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="45%" stop-color="#f59e0b"/>
+      <stop offset="90%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </radialGradient>
+    <linearGradient id="lettuceGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="50%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 100% Transparent Background - Exactly as 2nd Reference Image -->
+
+  <!-- ==============================================================================
+       1. DIGITAL AI WIREFRAME HOLOGRAPHIC GLOBE (Right Background)
+       ============================================================================== -->
+  <g transform="translate(480, 100)">
+    <!-- Globe halo -->
+    <circle cx="160" cy="160" r="140" fill="url(#globeGlow)"/>
+    
+    <!-- Wireframe Latitudes & Longitudes -->
+    <ellipse cx="160" cy="160" rx="130" ry="130" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+    <ellipse cx="160" cy="160" rx="130" ry="50" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.5"/>
+    <ellipse cx="160" cy="160" rx="130" ry="95" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.4"/>
+    <ellipse cx="160" cy="160" rx="55" ry="130" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.5"/>
+    <ellipse cx="160" cy="160" rx="100" ry="130" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.4"/>
+    
+    <!-- Connected Network Nodes -->
+    <g fill="#38bdf8" stroke="#ffffff" stroke-width="1">
+      <circle cx="100" cy="110" r="4"/>
+      <circle cx="170" cy="85" r="5"/>
+      <circle cx="230" cy="120" r="4"/>
+      <circle cx="150" cy="160" r="6"/>
+      <circle cx="210" cy="190" r="5"/>
+      <circle cx="110" cy="210" r="4"/>
+      <circle cx="240" cy="220" r="3"/>
+    </g>
+    <!-- Network Lines -->
+    <path d="M100,110 L170,85 L230,120 L210,190 L150,160 L100,110 M150,160 L110,210 L210,190" fill="none" stroke="#7dd3fc" stroke-width="1" opacity="0.7"/>
+    
+    <!-- Glowing AI Text in Globe -->
+    <text x="160" y="180" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2" filter="url(#chipGlow)">AI</text>
+  </g>
+
+  <!-- ==============================================================================
+       2. SWEEPING ORGANIC LEAF SASH (Left Outer Arc)
+       ============================================================================== -->
+  <!-- Back Leaf Wing -->
+  <path d="M210,480 C130,420 160,250 250,180 C265,170 300,140 320,130 C300,180 280,240 280,310 C280,390 250,450 210,480 Z" fill="url(#leafGradDark)"/>
+
+  <!-- Main Front Sweeping Green Leaf -->
+  <path d="M190,520 C100,430 110,260 280,140 C340,95 400,110 420,130 C390,170 320,230 290,320 C260,410 240,480 190,520 Z" fill="url(#leafGradPrimary)"/>
+  <!-- Leaf Central Spine Rib -->
+  <path d="M200,510 C180,410 240,280 410,135" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Secondary Lower Leaf Accent -->
+  <path d="M220,540 C170,520 160,460 210,420 C250,450 260,500 220,540 Z" fill="#22c55e" opacity="0.8"/>
+
+  <!-- ==============================================================================
+       3. 3D ISOMETRIC SMART FOOD PACKAGING BOX
+       ============================================================================== -->
+  <g id="smartPackagingBox" transform="translate(240, 180)">
+    <!-- Box Shadow on Ground -->
+    <ellipse cx="160" cy="330" rx="160" ry="24" fill="#0f172a" opacity="0.12"/>
+
+    <!-- Open Top Flaps (Back & Left) -->
+    <!-- Back Flap -->
+    <polygon points="110,60 160,10 260,40 210,90" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+    <!-- Left Flap -->
+    <polygon points="40,110 5,60 110,60 130,110" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <!-- Inner Box Cavity -->
+    <polygon points="130,110 210,90 280,140 160,165" fill="#334155"/>
+
+    <!-- ==============================================================================
+         FRESH PRODUCE INSIDE BOX
+         ============================================================================== -->
+    <!-- Crisp Green Lettuce / Spinach Leaves Sprouting -->
+    <g transform="translate(130, 20)">
+      <path d="M40,90 C20,50 30,10 60,0 C75,15 80,45 65,90 Z" fill="url(#lettuceGrad)"/>
+      <path d="M60,0 L50,85" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <!-- Side Leaf -->
+      <path d="M25,85 C5,60 15,25 45,25 C45,45 45,70 35,90 Z" fill="#16a34a"/>
+      <!-- Second Leaf -->
+      <path d="M70,85 C95,55 90,20 65,20 C60,45 65,70 70,85 Z" fill="#22c55e"/>
+    </g>
+
+    <!-- Ripe Red Tomato -->
+    <g transform="translate(100, 75)">
+      <circle cx="45" cy="45" r="38" fill="url(#tomatoGrad)"/>
+      <!-- Tomato highlight reflection -->
+      <ellipse cx="35" cy="30" rx="12" ry="7" fill="#ffffff" opacity="0.4" transform="rotate(-25, 35, 30)"/>
+      <!-- Tomato Calyx (Green Star Top) -->
+      <path d="M45,12 L48,5 L52,12 L59,8 L55,15 L62,18 L55,20 L58,27 L50,23 L47,30 L44,23 L37,27 L40,20 L33,18 L40,15 L36,8 Z" fill="#15803d"/>
+    </g>
+
+    <!-- Golden Orange Bell Pepper -->
+    <g transform="translate(170, 70)">
+      <!-- Bell Pepper Body lobes -->
+      <path d="M20,40 C15,15 35,5 50,15 C65,5 85,15 80,40 C85,65 75,85 50,85 C25,85 15,65 20,40 Z" fill="url(#pepperGrad)"/>
+      <!-- Lobes Highlight -->
+      <path d="M30,30 C28,45 32,65 42,75" stroke="#fef08a" stroke-width="3" stroke-linecap="round" opacity="0.5" fill="none"/>
+      <!-- Green Pepper Stem -->
+      <path d="M48,15 C46,0 56,-8 60,-5 C58,5 54,12 52,15 Z" fill="#15803d"/>
+    </g>
+
+    <!-- Right Flap (Open) -->
+    <polygon points="210,90 280,140 330,105 260,40" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+    <!-- Front Flap (Folded Down) -->
+    <polygon points="130,110 160,165 140,210 90,165" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+
+    <!-- Left Front Outer Box Panel (Clean High-Tech White) -->
+    <polygon points="40,110 160,165 160,285 40,210" fill="url(#boxLeft)" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <!-- Right Front Outer Box Panel (Vibrant Green with Printed AI Circuit) -->
+    <polygon points="160,165 280,140 280,240 160,285" fill="url(#boxRight)" stroke="#166534" stroke-width="1.5"/>
+
+    <!-- ==============================================================================
+         PRINTED CIRCUIT TRACKS & AI MICROCHIP ON BOX
+         ============================================================================== -->
+    <g id="circuitAndChip" transform="translate(160, 140)">
+      <!-- Cyber Circuit Traces on Green Box Panel -->
+      <g stroke="#86efac" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" fill="none">
+        <!-- Top traces from edge to chip -->
+        <path d="M30,15 L30,45"/>
+        <path d="M55,10 L55,45"/>
+        <path d="M80,8 L80,45"/>
+        
+        <!-- Bottom traces from chip to bottom -->
+        <path d="M30,100 L30,130"/>
+        <path d="M55,100 L55,135"/>
+        <path d="M80,100 L80,120"/>
+        
+        <!-- Right side traces -->
+        <path d="M95,60 L115,55"/>
+        <path d="M95,80 L115,75"/>
+      </g>
+      <!-- Circuit Node Dots -->
+      <g fill="#4ade80">
+        <circle cx="30" cy="15" r="3.5"/>
+        <circle cx="55" cy="10" r="3.5"/>
+        <circle cx="80" cy="8" r="3.5"/>
+        <circle cx="30" cy="130" r="3.5"/>
+        <circle cx="55" cy="135" r="3.5"/>
+        <circle cx="80" cy="120" r="3.5"/>
+        <circle cx="115" cy="55" r="3.5"/>
+        <circle cx="115" cy="75" r="3.5"/>
+      </g>
+
+      <!-- Glowing High-Tech AI Microchip -->
+      <g transform="translate(15, 45)">
+        <!-- Outer glow aura -->
+        <rect x="0" y="0" width="75" height="58" rx="8" fill="#38bdf8" opacity="0.35" filter="url(#chipGlow)"/>
+        <!-- Chip Pins (metallic leads) -->
+        <g fill="#cbd5e1">
+          <!-- Top & Bottom leads -->
+          <rect x="12" y="-4" width="6" height="5"/>
+          <rect x="26" y="-4" width="6" height="5"/>
+          <rect x="40" y="-4" width="6" height="5"/>
+          <rect x="54" y="-4" width="6" height="5"/>
+          <rect x="12" y="57" width="6" height="5"/>
+          <rect x="26" y="57" width="6" height="5"/>
+          <rect x="40" y="57" width="6" height="5"/>
+          <rect x="54" y="57" width="6" height="5"/>
+          <!-- Left & Right leads -->
+          <rect x="-4" y="14" width="5" height="6"/>
+          <rect x="-4" y="26" width="5" height="6"/>
+          <rect x="-4" y="38" width="5" height="6"/>
+          <rect x="74" y="14" width="5" height="6"/>
+          <rect x="74" y="26" width="5" height="6"/>
+          <rect x="74" y="38" width="5" height="6"/>
+        </g>
+        
+        <!-- Main Chip Ceramic Package -->
+        <rect x="0" y="0" width="75" height="58" rx="8" fill="url(#chipGrad)" stroke="#38bdf8" stroke-width="2"/>
+        
+        <!-- Inner Circuit Die Border -->
+        <rect x="6" y="6" width="63" height="46" rx="5" fill="#0c4a6e" stroke="#7dd3fc" stroke-width="1.2" stroke-dasharray="3,2"/>
+        
+        <!-- Prominent AI Typography -->
+        <text x="37.5" y="37" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="26" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">AI</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Wrapping Front Eco-Leaf Sweeping Over Bottom of Box -->
+  <path d="M310,500 C270,440 330,360 410,320 C425,350 430,400 390,460 C370,490 340,510 310,500 Z" fill="url(#leafGradPrimary)"/>
+  <path d="M315,495 C350,430 380,380 410,325" stroke="#ffffff" stroke-width="2" opacity="0.5" fill="none"/>
+
+  <!-- ==============================================================================
+       4. OFFICIAL PACKSENSE TYPOGRAPHY (MATCHING HEADLINE EXACTLY: PackSense AI [AI])
+       ============================================================================== -->
+  <g id="brandTypography" transform="translate(400, 608)">
+    <!-- "PackSense AI" in Deep Navy (#0b2238) matching headline exactly -->
+    <text x="-50" y="0" font-family="'Plus Jakarta Sans', Montserrat, system-ui, -apple-system, sans-serif" font-size="82" font-weight="900" fill="#0b2238" text-anchor="middle" letter-spacing="-1.5">PackSense AI</text>
+
+    <!-- AI Name Badge: Black background, white bold text, centered vertically with the headline name -->
+    <g transform="translate(235, -55)">
+      <rect x="0" y="0" width="76" height="52" rx="12" fill="#000000"/>
+      <text x="38" y="36" font-family="'Plus Jakarta Sans', Montserrat, system-ui, -apple-system, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">AI</text>
+    </g>
+
+    <!-- ==============================================================================
+         5. OFFICIAL TAGLINE: SMART PACKAGING • HEALTHIER FOOD • BRIGHTER TOMORROW
+         ============================================================================== -->
+    <g transform="translate(0, 56)">
+      <text x="0" y="0" font-family="'Plus Jakarta Sans', Montserrat, system-ui, -apple-system, sans-serif" font-size="15.5" font-weight="800" fill="#0f2942" text-anchor="middle" letter-spacing="2.5">
+        SMART PACKAGING <tspan fill="#16a34a" font-weight="900">•</tspan> HEALTHIER FOOD <tspan fill="#16a34a" font-weight="900">•</tspan> BRIGHTER TOMORROW
+      </text>
+    </g>
+  </g>
+</svg>

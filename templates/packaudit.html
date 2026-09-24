@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="audit-container">
+  <!-- Header -->
+  <div style="text-align: center; max-width: 720px; margin: 0 auto 2.5rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: #e0f2fe; color: #0284c7; padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.75rem;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      CHANNEL B • COMPUTER VISION AUDITOR
+    </div>
+    <h1 style="font-size: 2.25rem; font-weight: 800; color: var(--deep-navy); letter-spacing: -0.02em; margin-bottom: 0.5rem;">
+      Visual PackAudit
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.5;">
+      {{ t('lbl_channel_b_desc') }} Upload a photograph of your existing food pouch, clamshell, or polybag to analyze film opacity, specular reflectivity, seal integrity, and structural defects.
+    </p>
+  </div>
+
+  <!-- Upload Form -->
+  <form action="{{ url_for('packaudit') }}" method="POST" enctype="multipart/form-data" id="auditUploadForm">
+    <input type="hidden" name="mode" id="auditModeInput" value="{{ active_mode or 'farmer' }}">
+    
+    <!-- Mode Switcher Card -->
+    <div style="background: #ffffff; border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: var(--shadow-sm);">
+      <div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--deep-navy);">SELECT AUDIT WORKFLOW MODE:</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Choose between mandi-level farmer guidance or certified laboratory defect spectroscopy.</div>
+      </div>
+      <div class="mode-toggle-group" style="margin: 0;">
+        <button type="button" class="mode-toggle-btn {% if active_mode != 'industry' %}active{% endif %}" id="auditFarmerModeBtn" onclick="setAuditMode('farmer')">
+          👨‍🌾 Farmer / SME Mode
+        </button>
+        <button type="button" class="mode-toggle-btn {% if active_mode == 'industry' %}active{% endif %}" id="auditIndustryModeBtn" onclick="setAuditMode('industry')">
+          🔬 Industry / Lab Mode
+        </button>
+      </div>
+    </div>
+
+    <div class="channel-card" style="margin-bottom: 2rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <label class="form-label" for="auditFoodSelect">Select Food Commodity Inside Package:</label>
+          <select name="food_name" id="auditFoodSelect" class="form-select">
+            {% for f in all_foods %}
+              <option value="{{ f.name }}" {% if selected_food == f.name %}selected{% endif %}>{{ f.name }} ({{ f.category }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Packaging Environment:</label>
+          <select name="storage_env" class="form-select">
+            <option value="Ambient">Ambient Retail Shelf</option>
+            <option value="Refrigerated">Chilled Display (4°C)</option>
+            <option value="Transit">Highway Transit Truck</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="audit-upload-box" onclick="document.getElementById('auditImageFile').click()">
+        <input type="file" name="audit_image" id="auditImageFile" accept="image/*" style="display: none;" onchange="previewAuditImage(event)">
+        <div class="audit-upload-icon">📸</div>
+        <h3 id="auditUploadTitle" style="font-size: 1.25rem; font-weight: 700; color: var(--deep-navy); margin-bottom: 0.25rem;">
+          {% if active_mode == 'industry' %}Upload Industrial Packaging Specimen{% else %}Upload Farm Bag, Crate, or Pouch Photo{% endif %}
+        </h3>
+        <p id="auditUploadDesc" style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
+          {% if active_mode == 'industry' %}High-res microscopy, seal cross-section, or ASTM test pouch{% else %}Phone photo of gunny sack, polybag, fruit box, or crate{% endif %}
+        </p>
+        <span class="btn btn-outline btn-sm">Select Image</span>
+      </div>
+
+      <div id="auditPreviewArea" style="display: none; text-align: center; margin-bottom: 1.5rem;">
+        <img id="auditImgElement" src="#" alt="Upload preview" style="max-height: 240px; border-radius: var(--radius-sm); border: 1px solid #cbd5e1; box-shadow: var(--shadow-sm);">
+      </div>
+
+      <!-- Quick Inspection Presets -->
+      <div style="margin-top: 1.25rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: var(--radius-sm); border: 1px dashed #cbd5e1; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.785rem; font-weight: 800; color: var(--deep-navy);">Quick Demo Presets:</span>
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectDemoPreset('Strawberry', 'farmer')" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; background: white;">🍓 Strawberry Punnet (Farmer)</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectDemoPreset('Potato Chips', 'industry')" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; background: white;">🥔 Chips Met-PET (Industry)</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectDemoPreset('Alphonso Mango', 'farmer')" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; background: white;">🥭 Mango Box (Farmer)</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectDemoPreset('Paneer', 'industry')" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; background: white;">🧀 Paneer Vacuum Pack (Industry)</button>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1.25rem;" id="submitAuditBtn">
+        Run Computer Vision PackAudit
+      </button>
+    </div>
+  </form>
+
+  <!-- Results Section -->
+  {% if audit_result %}
+    <div class="audit-results-grid">
+      <!-- Left Column: Image Preview -->
+      <div>
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--deep-navy); margin-bottom: 0.75rem;">
+          Analyzed Packaging Sample
+        </h4>
+        {% if uploaded_image_url %}
+          <img src="{{ uploaded_image_url }}" alt="Analyzed packaging" class="audit-preview-image">
+        {% else %}
+          <div style="height: 240px; background: #f1f5f9; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem;">
+            Demo Reference Film
+          </div>
+        {% endif %}
+
+        {% if audit_result.is_demo_estimated %}
+          <div style="font-size: 0.75rem; color: #d97706; background: #fef3c7; padding: 0.5rem; border-radius: var(--radius-sm); margin-top: 0.75rem; line-height: 1.4;">
+            ℹ️ Algorithmic computer vision analysis calibrated with OpenCV & NumPy optics.
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column: Mode-Specific Computer Vision & Vulnerability Display -->
+      <div>
+        <!-- FARMER MODE RESULT DISPLAY -->
+        <div id="auditFarmerResultCard" style="display: {% if active_mode == 'industry' %}none{% else %}block{% endif %};">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.85rem; font-weight: 800; color: #166534; text-transform: uppercase;">👨‍🌾 Mandi Spoilage & Rot Vulnerability</span>
+            <span style="font-size: 0.75rem; background: #dcfce7; color: #166534; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700;">Farmer PackScan</span>
+          </div>
+
+          <div class="vuln-score-display" style="background: #f0fdf4; border-color: #bbf7d0;">
+            <span class="vuln-score-num" style="color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+              {{ audit_result.vulnerability_score }}
+            </span>
+            <span class="vuln-score-den">/ 10</span>
+            <span style="margin-left: 0.75rem; font-size: 0.95rem; font-weight: 700; color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+              {% if audit_result.vulnerability_score > 6 %}
+                ⚠️ High Spoilage Risk in Mandi Transit
+              {% elif audit_result.vulnerability_score > 3 %}
+                ⚠️ Moderate Risk of Produce Sweat & Softening
+              {% else %}
+                ✅ Safe & Well Protected Pack
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- Farmer Details -->
+          <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="margin-bottom: 0.6rem;">
+              <span style="color: #64748b; font-size: 0.8rem; font-weight: 700; display: block;">PACKAGE DETECTED:</span>
+              <strong style="color: #14532d; font-size: 0.95rem;">{{ audit_result.farmer_info.detected_name if audit_result.farmer_info else audit_result.detected_type }}</strong>
+            </div>
+            <div style="margin-bottom: 0.6rem; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.6rem; border-radius: 4px;">
+              <strong style="color: #78350f; font-size: 0.85rem; display: block; margin-bottom: 0.2rem;">🚨 Transit Spoilage Risk:</strong>
+              <p style="font-size: 0.85rem; color: #92400e; margin: 0; line-height: 1.4;">{{ audit_result.farmer_info.spoilage_risk if audit_result.farmer_info else audit_result.vulnerability_reason }}</p>
+            </div>
+            <div style="margin-bottom: 0.6rem; background: #f0fdf4; border-left: 4px solid #10b981; padding: 0.6rem; border-radius: 4px;">
+              <strong style="color: #166534; font-size: 0.85rem; display: block; margin-bottom: 0.2rem;">💡 Low-Cost Farmer Action:</strong>
+              <p style="font-size: 0.85rem; color: #14532d; margin: 0; line-height: 1.4;">{{ audit_result.farmer_info.practical_action if audit_result.farmer_info else audit_result.recommended_upgrade }}</p>
+            </div>
+            <div style="font-size: 0.8rem; color: #15803d; font-weight: 700;">
+              💰 {{ audit_result.farmer_info.loss_prevention_est if audit_result.farmer_info else 'Prevents severe produce dumping losses at mandi.' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- INDUSTRY MODE RESULT DISPLAY -->
+        <div id="auditIndustryResultCard" style="display: {% if active_mode == 'industry' %}block{% else %}none{% endif %};">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.85rem; font-weight: 800; color: #1e40af; text-transform: uppercase;">🔬 ASTM Defect Spectroscopy & Seal Rheology</span>
+            <span style="font-size: 0.75rem; background: #dbeafe; color: #1e40af; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700;">Lab Standards</span>
+          </div>
+
+          <div class="vuln-score-display" style="background: #eff6ff; border-color: #bfdbfe;">
+            <span class="vuln-score-num" style="color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+              {{ audit_result.vulnerability_score }}
+            </span>
+            <span class="vuln-score-den">/ 10</span>
+            <span style="margin-left: 0.75rem; font-size: 0.95rem; font-weight: 700; color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+              {% if audit_result.vulnerability_score > 6 %}
+                Critical ASTM Barrier Non-Compliance
+              {% elif audit_result.vulnerability_score > 3 %}
+                Sub-Optimal ASTM Barrier Calibration
+              {% else %}
+                Hermetic ASTM Barrier Compliant
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- Industry Vision Attributes Table -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem; margin-bottom: 0.75rem;">
+              <div>
+                <span style="color: var(--text-muted); display: block;">Film Opacity (Haze):</span>
+                <strong>{{ audit_result.opacity_pct }}%</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); display: block;">Specular Glint Index:</span>
+                <strong>{{ audit_result.reflectivity_pct }}%</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); display: block;">Polymer Classification:</span>
+                <strong>{{ audit_result.industry_info.detected_name if audit_result.industry_info else audit_result.detected_type }}</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); display: block;">ASTM F88 Seal Margin:</span>
+                <strong>{{ audit_result.industry_info.seal_integrity_astm if audit_result.industry_info else audit_result.seal_integrity }}</strong>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 0.6rem; background: #ffffff; border-left: 4px solid #2563eb; padding: 0.6rem; border-radius: 4px;">
+              <strong style="color: #1e3a8a; font-size: 0.85rem; display: block; margin-bottom: 0.2rem;">🔬 Defect Spectroscopy:</strong>
+              <p style="font-size: 0.85rem; color: #1e40af; margin: 0; line-height: 1.4;">{{ audit_result.industry_info.defect_spectroscopy if audit_result.industry_info else audit_result.vulnerability_reason }}</p>
+            </div>
+            <div style="background: #ffffff; border-left: 4px solid #059669; padding: 0.6rem; border-radius: 4px;">
+              <strong style="color: #065f46; font-size: 0.85rem; display: block; margin-bottom: 0.2rem;">⚙️ Machine Remediation:</strong>
+              <p style="font-size: 0.85rem; color: #047857; margin: 0; line-height: 1.4;">{{ audit_result.industry_info.engineering_remediation if audit_result.industry_info else audit_result.recommended_upgrade }}</p>
+            </div>
+          </div>
+        </div>
+
+        <a id="transferToWorkspaceBtn" href="{{ url_for('workspace', food=selected_food, vuln=audit_result.vulnerability_score, mode=active_mode or 'farmer') }}" class="btn btn-primary" style="width: 100%;">
+          Transfer Audit to Full Workspace & Calibrate Solution &rarr;
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  function setAuditMode(mode) {
+    document.getElementById('auditModeInput').value = mode;
+    const isIndustry = mode === 'industry';
+    
+    // Toggle active classes on buttons
+    if (isIndustry) {
+      document.getElementById('auditIndustryModeBtn').classList.add('active');
+      document.getElementById('auditFarmerModeBtn').classList.remove('active');
+    } else {
+      document.getElementById('auditFarmerModeBtn').classList.add('active');
+      document.getElementById('auditIndustryModeBtn').classList.remove('active');
+    }
+
+    // Update upload titles and prompts
+    const uploadTitle = document.getElementById('auditUploadTitle');
+    const uploadDesc = document.getElementById('auditUploadDesc');
+    if (isIndustry) {
+      if (uploadTitle) uploadTitle.innerText = 'Upload Industrial Packaging Specimen';
+      if (uploadDesc) uploadDesc.innerText = 'High-res microscopy, seal cross-section, or ASTM test pouch';
+    } else {
+      if (uploadTitle) uploadTitle.innerText = 'Upload Farm Bag, Crate, or Pouch Photo';
+      if (uploadDesc) uploadDesc.innerText = 'Phone photo of gunny sack, polybag, fruit box, or crate';
+    }
+
+    // Toggle result views if present
+    const farmerRes = document.getElementById('auditFarmerResultCard');
+    const indRes = document.getElementById('auditIndustryResultCard');
+    if (farmerRes) farmerRes.style.display = isIndustry ? 'none' : 'block';
+    if (indRes) indRes.style.display = isIndustry ? 'block' : 'none';
+
+    // Update transfer link
+    const transferBtn = document.getElementById('transferToWorkspaceBtn');
+    if (transferBtn) {
+      const currentHref = new URL(transferBtn.href, window.location.origin);
+      currentHref.searchParams.set('mode', mode);
+      transferBtn.href = currentHref.pathname + currentHref.search;
+    }
+  }
+
+  function selectDemoPreset(food, mode) {
+    const sel = document.getElementById('auditFoodSelect');
+    if (sel) sel.value = food;
+    setAuditMode(mode);
+    const submitBtn = document.getElementById('submitAuditBtn');
+    if (submitBtn) {
+      submitBtn.innerHTML = '⏳ Loading ' + food + ' Scan (' + (mode === 'industry' ? 'Lab Mode' : 'Farmer Mode') + ')...';
+      submitBtn.disabled = true;
+    }
+    document.getElementById('auditUploadForm').submit();
+  }
+
+  function previewAuditImage(e) {
+    const input = e.target;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('auditImgElement').src = evt.target.result;
+        document.getElementById('auditPreviewArea').style.display = 'block';
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{% endblock %}

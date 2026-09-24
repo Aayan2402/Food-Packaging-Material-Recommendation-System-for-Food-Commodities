@@ -1,0 +1,105 @@
+{
+  "regulations_meta": {
+    "title": "Food Safety and Standards (Packaging) Regulations, 2018",
+    "short_title": "FSSAI Packaging Regulations, 2018",
+    "authority": "Food Safety and Standards Authority of India (FSSAI)",
+    "enabling_act": "Section 92 of the Food Safety and Standards Act, 2006 (Act No. 34 of 2006)",
+    "effective_date": "July 1, 2019 (Compulsory compliance across India)",
+    "scope": "All food business operators (FBOs) manufacturing, importing, packing, storing, distributing or selling food articles in India"
+  },
+  "general_requirements": [
+    {
+      "clause": "Regulation 3(1)",
+      "title": "Safety & Inertness of Packaging Materials",
+      "summary": "Every food business operator shall ensure that the packaging material is in accordance with these regulations and is completely food-grade, safe, and clean.",
+      "key_points": [
+        "Packaging materials must not transfer their constituents to food in quantities injurious to human health.",
+        "Must not deteriorate organoleptic (taste, smell, texture, appearance) properties of food.",
+        "Must be stored in a clean and hygienic environment prior to use.",
+        "Printing inks and adhesives must not come into direct contact with food articles unless specifically certified as safe food-grade inks."
+      ]
+    },
+    {
+      "clause": "Regulation 3(4)",
+      "title": "Prohibition of Newspaper and Printed Paper for Food Contact",
+      "summary": "Newspapers, recycled papers, or printed paper materials SHALL NOT be used for storing, wrapping, lining, serving, or absorbing excess oil from cooked or fresh food products.",
+      "scientific_reasons": [
+        "Newspaper printing inks contain dangerous chemical binders, mineral oil saturated hydrocarbons (MOSH), mineral oil aromatic hydrocarbons (MOAH), naphthylamines, and phthalates.",
+        "Printing pigments contain heavy metal residues including lead, cadmium, and cobalt.",
+        "Hot and oily foods rapidly leach oil-soluble ink solvents directly into the food matrix within seconds of contact.",
+        "Printing presses and secondary handling expose newspaper surfaces to pathogenic microorganisms, fecal bacteria, and atmospheric dust."
+      ],
+      "approved_alternatives": [
+        "Food-grade greaseproof paper conforming to IS 6615",
+        "Food-grade butter paper or baking parchment paper",
+        "Virgin cellulose food-grade paper napkins conforming to IS 1060",
+        "Traditional clean banana leaves or plant-based leaf wraps",
+        "Food-grade stainless steel (SS304/SS316) trays"
+      ]
+    },
+    {
+      "clause": "Regulation 3(2)",
+      "title": "Prohibition of Recycled Plastics in Primary Food Packaging",
+      "summary": "Recycled plastics SHALL NOT be used in packaging material for food articles unless processed through approved decontamination technologies meeting FSSAI circular guidelines.",
+      "key_points": [
+        "Post-consumer untreated plastic recyclates contain chemical impurities, pesticide residues, and plasticizer degradation products.",
+        "Only specifically certified food-grade rPET processes compliant with FSSAI direction F.No. RCD-02001/4/2021 are permitted for secondary/tertiary or approved food bottles."
+      ]
+    }
+  ],
+  "specific_material_standards": {
+    "plastics": {
+      "overall_migration_limit": "60 mg/kg or 10 mg/dm² into food simulants (IS 9845:2020 testing)",
+      "mandatory_bis_standards": [
+        {"material": "Polyethylene (PE - LDPE, LLDPE, HDPE)", "standard": "IS 10146"},
+        {"material": "Polypropylene (PP)", "standard": "IS 10910"},
+        {"material": "Polyvinyl Chloride (PVC)", "standard": "IS 10151"},
+        {"material": "Polyester (PET / APET / PETG)", "standard": "IS 12252"},
+        {"material": "Polyamide (Nylon 6 / 66)", "standard": "IS 12247"},
+        {"material": "Ethylene Vinyl Alcohol (EVOH)", "standard": "IS 16672"},
+        {"material": "Polystyrene (PS / HIPS)", "standard": "IS 10142"}
+      ],
+      "pigments_and_colorants": "Must comply with IS 9833 (List of pigments and colorants for use in plastics in contact with foodstuffs)"
+    },
+    "paper_and_paperboard": {
+      "mandatory_bis_standards": [
+        {"material": "Paper for packaging", "standard": "IS 6615"},
+        {"material": "Greaseproof and vegetable parchment", "standard": "IS 1060"},
+        {"material": "Corrugated fibreboard boxes", "standard": "IS 2771"}
+      ],
+      "contaminant_limits": {
+        "lead": "Maximum 3.0 mg/kg",
+        "cadmium": "Maximum 0.5 mg/kg",
+        "arsenic": "Maximum 2.0 mg/kg",
+        "mercury": "Maximum 0.3 mg/kg"
+      }
+    },
+    "glass": {
+      "mandatory_bis_standards": [
+        {"material": "Glass containers for food and beverages", "standard": "IS 1382"},
+        {"material": "Testing for alkali extraction from glass", "standard": "IS 2303"}
+      ],
+      "requirements": "Must be inert, neutral, chemically resistant, free from cracks, thermal shock resistant, and contain no lead or toxic heavy metal fluxes."
+    },
+    "metal_and_tinplate": {
+      "mandatory_bis_standards": [
+        {"material": "Cold-reduced tinplate and tin-free steel (TFS)", "standard": "IS 1997"},
+        {"material": "Wrought aluminum and aluminum alloys for food packaging", "standard": "IS 737"},
+        {"material": "Round tinplate cans for food preservation", "standard": "IS 9396"}
+      ],
+      "requirements": "Must be coated with approved food-grade epoxy, organosol, or polyester lacquers to prevent acidic corrosion and metal leaching (iron, tin, aluminum)."
+    }
+  },
+  "labelling_and_traceability": {
+    "regulation": "Food Safety and Standards (Labelling and Display) Regulations, 2020",
+    "mandatory_declarations": [
+      "FSSAI License / Registration logo and 14-digit license number",
+      "Name and address of Food Business Operator (Manufacturer/Packer/Marketer)",
+      "Veg / Non-Veg symbol (Green dot inside green square / Brown triangle in brown square)",
+      "Net quantity, Batch / Lot identification code",
+      "Date of manufacture and Use-by / Expiry date",
+      "Nutritional information per 100g/100ml and per serve",
+      "Storage instructions and allergen warnings"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 4rem auto; padding: 0 1.5rem;">
+  <div style="background: white; border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-md);">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy);">{{ t('nav_register') }}</h2>
+      <p style="color: var(--text-muted); font-size: 0.875rem;">Join PackSense AI to optimize packaging and reduce food waste</p>
+    </div>
+
+    <form action="{{ url_for('register', lang=active_lang) }}" method="POST">
+      <div class="form-group">
+        <label class="form-label" for="regName">Full Name</label>
+        <input type="text" name="name" id="regName" class="form-input" required placeholder="Dr. Rajesh Patil">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="regEmail">Email Address</label>
+        <input type="email" name="email" id="regEmail" class="form-input" required placeholder="rajesh@agro.in">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="regRole">Role</label>
+        <select name="role" id="regRole" class="form-select">
+          <option value="farmer">Farmer / Agricultural Cooperative</option>
+          <option value="sme">Food Processing SME</option>
+          <option value="industry">Packaging Technologist / Engineer</option>
+          <option value="researcher">Academic / Food Science Student</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="regPassword">Password</label>
+        <input type="password" name="password" id="regPassword" class="form-input" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
+        {{ t('nav_register') }}
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-muted);">
+      Already have an account? <a href="{{ url_for('login', lang=active_lang) }}" style="color: var(--primary-green-dark); font-weight: 700; text-decoration: none;">Login here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

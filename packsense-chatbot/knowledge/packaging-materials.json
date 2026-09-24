@@ -1,0 +1,95 @@
+{
+  "materials": {
+    "plastics": [
+      {
+        "name": "Low-Density Polyethylene (LDPE / LLDPE)",
+        "bis_standard": "IS 10146",
+        "barrier_properties": {"moisture": "Good (WVTR ~10-15 g/m²/day)", "oxygen": "Poor (OTR ~2000-3000 cc/m²/day)", "oil": "Moderate"},
+        "suitable_foods": "Fresh bread, frozen vegetables, squeeze bottles, milk pouch sealing layer",
+        "temperature_range": "-40°C to +75°C",
+        "food_contact_notes": "Very inert, excellent heat-seal integrity, widely used as the inner sealant layer in multilayer laminates."
+      },
+      {
+        "name": "High-Density Polyethylene (HDPE)",
+        "bis_standard": "IS 10146",
+        "barrier_properties": {"moisture": "Very Good (WVTR ~4-8 g/m²/day)", "oxygen": "Moderate (OTR ~1000 cc/m²/day)", "oil": "Good"},
+        "suitable_foods": "Milk bottles, edible oil containers, dry grain liners, closures and caps",
+        "temperature_range": "-40°C to +110°C",
+        "food_contact_notes": "Stiff, moisture-resistant, excellent chemical and stress crack resistance."
+      },
+      {
+        "name": "Biaxially Oriented Polypropylene (BOPP)",
+        "bis_standard": "IS 10910",
+        "barrier_properties": {"moisture": "Excellent (WVTR ~4-6 g/m²/day)", "oxygen": "Moderate (OTR ~1200 cc/m²/day)", "oil": "High"},
+        "suitable_foods": "Confectionery, biscuits, tea packets, pasta, snack outer wrappers",
+        "temperature_range": "0°C to +130°C",
+        "food_contact_notes": "High clarity, high tensile strength, excellent printability, moisture shield."
+      },
+      {
+        "name": "Metallized BOPP (Met-BOPP)",
+        "bis_standard": "IS 10910 / IS 1060",
+        "barrier_properties": {"moisture": "Outstanding (WVTR < 0.5 g/m²/day)", "oxygen": "Outstanding (OTR < 15-30 cc/m²/day)", "light": "100% Optical Opacity"},
+        "suitable_foods": "Potato chips, fried namkeen, roasted nuts, coffee powders",
+        "temperature_range": "0°C to +125°C",
+        "food_contact_notes": "Microscopic vacuum-deposited aluminum layer provides an exceptional barrier against light and oxygen to prevent lipid rancidity."
+      },
+      {
+        "name": "Polyethylene Terephthalate (PET / APET)",
+        "bis_standard": "IS 12252",
+        "barrier_properties": {"moisture": "Moderate", "oxygen": "High (OTR ~40-60 cc/m²/day)", "aroma": "Outstanding"},
+        "suitable_foods": "Carbonated beverages, fruit juices, honey, edible oils, punnets for berries",
+        "temperature_range": "-20°C to +70°C",
+        "food_contact_notes": "Crystal clear, rigid, excellent gas and aroma barrier, recyclable."
+      },
+      {
+        "name": "Ethylene Vinyl Alcohol (EVOH)",
+        "bis_standard": "IS 16672",
+        "barrier_properties": {"oxygen": "Ultra-High (OTR < 0.2 cc/m²/day under dry conditions)", "aroma": "Exceptional", "moisture": "Moderate (requires PE sandwich)"},
+        "suitable_foods": "Vacuum packed meat, fresh paneer, aseptic fruit purees, oxygen-sensitive sauces",
+        "temperature_range": "-30°C to +120°C",
+        "food_contact_notes": "Highest gas barrier polymer available; co-extruded in 5 to 9 layer films shielded by PE layers."
+      }
+    ],
+    "paper_and_board": [
+      {
+        "name": "Greaseproof Paper",
+        "bis_standard": "IS 6615 / IS 1060",
+        "barrier_properties": {"oil": "High Kit Rating (Kit 7-12)", "moisture": "Moderate without bio-coating"},
+        "suitable_foods": "Bakery goods, burgers, fried street food wrapping, samosas, butter wrapping",
+        "food_contact_notes": "Produced by mechanical hydration of fibers; safe, non-toxic, certified food-grade alternative to newspaper."
+      },
+      {
+        "name": "Virgin Bleached Sulfate (SBS) Paperboard",
+        "bis_standard": "IS 6615",
+        "barrier_properties": {"rigidity": "High", "oil": "Requires barrier liner"},
+        "suitable_foods": "Dry cereal cartons, frozen food boxes, tea cartons, takeout meal boxes",
+        "food_contact_notes": "Made from 100% virgin pulp, compliant with heavy metal limits (Pb < 3 mg/kg)."
+      }
+    ],
+    "glass": [
+      {
+        "name": "Type III Soda-Lime Silica Glass",
+        "bis_standard": "IS 1382",
+        "barrier_properties": {"oxygen": "Absolute Zero Permeability", "moisture": "Absolute Zero Permeability", "chemical": "Completely Inert"},
+        "suitable_foods": "Pickles, jams, sauces, baby food, alcoholic beverages, clarified butter (ghee)",
+        "food_contact_notes": "Gold standard for chemical inertness; 100% recyclable; amber glass blocks harmful UV wavelengths."
+      }
+    ],
+    "metals": [
+      {
+        "name": "Lacquered Electrolytic Tinplate (ETP)",
+        "bis_standard": "IS 1997 / IS 9396",
+        "barrier_properties": {"barrier": "Complete barrier to light, gas, moisture, and microbes"},
+        "suitable_foods": "Canned mango pulp, processed mushrooms, rasgullas, condensed milk, canned fish",
+        "food_contact_notes": "Requires food-grade interior lacquer (epoxy-phenolic, polyester, or oleoresinous) to avoid metal acid etching."
+      },
+      {
+        "name": "Aluminum Foil Laminate (Alu-Foil)",
+        "bis_standard": "IS 737 / IS 15392",
+        "barrier_properties": {"barrier": "Zero pinhole permeability at thickness >= 9 microns"},
+        "suitable_foods": "Retort meals, milk powder, pharmaceutical nutraceuticals, military rations",
+        "food_contact_notes": "Provides an impenetrable barrier to light, gas, moisture, and odors."
+      }
+    ]
+  }
+}

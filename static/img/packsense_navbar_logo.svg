@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" width="320" height="64">
+  <defs>
+    <!-- Digital Globe Glow -->
+    <radialGradient id="nbGlobeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5"/>
+      <stop offset="70%" stop-color="#0284c7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Box Materials -->
+    <linearGradient id="nbBoxLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="nbBoxRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#0f532b"/>
+    </linearGradient>
+
+    <!-- Bio Leaf Gradients -->
+    <linearGradient id="nbLeafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="50%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#4ade80"/>
+    </linearGradient>
+
+    <!-- Fresh Produce -->
+    <radialGradient id="nbTomato" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="45%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </radialGradient>
+    <radialGradient id="nbPepper" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ==============================================================================
+       1. EMBLEM (Left: Open Box + Produce + AI Chip + Leaves + Globe)
+       Transparent background - NO dark box
+       ============================================================================== -->
+  <g transform="translate(4, 2) scale(0.60)">
+    <!-- Holographic AI Globe -->
+    <g transform="translate(48, 2)">
+      <circle cx="28" cy="28" r="24" fill="url(#nbGlobeGlow)"/>
+      <ellipse cx="28" cy="28" rx="22" ry="22" fill="none" stroke="#38bdf8" stroke-width="1.2" opacity="0.6"/>
+      <ellipse cx="28" cy="28" rx="22" ry="9" fill="none" stroke="#38bdf8" stroke-width="0.9" opacity="0.5"/>
+      <ellipse cx="28" cy="28" rx="9" ry="22" fill="none" stroke="#38bdf8" stroke-width="0.9" opacity="0.5"/>
+      <circle cx="16" cy="18" r="1.8" fill="#38bdf8"/>
+      <circle cx="36" cy="16" r="1.8" fill="#38bdf8"/>
+      <circle cx="28" cy="28" r="2.2" fill="#38bdf8"/>
+      <text x="28" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="900" fill="#0284c7" text-anchor="middle">AI</text>
+    </g>
+
+    <!-- Sweeping Outer Green Bio Leaf -->
+    <path d="M26,88 C8,72 10,40 34,22 C44,14 55,17 58,21 C52,30 42,40 38,55 C35,68 32,80 26,88 Z" fill="url(#nbLeafGrad)"/>
+    <path d="M28,85 C20,68 28,45 52,24" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.5" fill="none"/>
+
+    <!-- Open 3D Packaging Carton Box -->
+    <g transform="translate(6, 14)">
+      <!-- Box Shadow -->
+      <ellipse cx="44" cy="74" rx="34" ry="7" fill="#0f172a" opacity="0.12"/>
+
+      <!-- Open Flaps -->
+      <polygon points="28,24 40,12 62,20 50,30" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+      <polygon points="14,35 6,22 28,22 32,35" fill="url(#nbBoxLeft)" stroke="#94a3b8" stroke-width="0.8"/>
+
+      <!-- Inner Cavity -->
+      <polygon points="32,35 50,30 64,40 40,46" fill="#334155"/>
+
+      <!-- Fresh Produce Inside Box -->
+      <path d="M38,20 C32,8 40,2 48,0 C51,6 52,14 47,21 Z" fill="#22c55e"/>
+      <circle cx="30" cy="30" r="11" fill="url(#nbTomato)"/>
+      <circle cx="27" cy="27" r="3" fill="#ffffff" opacity="0.4"/>
+      <!-- Tomato Star Calyx -->
+      <path d="M30,19 L32,16 L33,19 L36,18 L34,21 L37,23 L34,24 L32,22 L30,24 L29,22 L27,23 L28,21 L26,19 Z" fill="#15803d"/>
+      <!-- Orange Pepper -->
+      <ellipse cx="46" cy="29" rx="10.5" ry="9.5" fill="url(#nbPepper)"/>
+
+      <!-- Right Flap (Open) -->
+      <polygon points="50,30 64,40 76,32 62,20" fill="#f8fafc" stroke="#94a3b8" stroke-width="0.8"/>
+
+      <!-- Front Panels -->
+      <polygon points="14,35 40,46 40,73 14,58" fill="url(#nbBoxLeft)" stroke="#94a3b8" stroke-width="0.8"/>
+      <polygon points="40,46 68,39 68,64 40,73" fill="url(#nbBoxRight)" stroke="#166534" stroke-width="0.8"/>
+
+      <!-- Circuit Traces & Microchip -->
+      <g stroke="#86efac" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.9">
+        <path d="M46,47 L46,52"/>
+        <path d="M54,45 L54,52"/>
+        <path d="M62,43 L62,52"/>
+        <path d="M46,65 L46,70"/>
+        <path d="M54,65 L54,71"/>
+      </g>
+      <rect x="46" y="52" width="16" height="13" rx="2.5" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+      <text x="54" y="61.5" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="900" fill="#ffffff" text-anchor="middle">AI</text>
+    </g>
+
+    <!-- Front Wrapping Eco Leaf -->
+    <path d="M38,88 C30,76 44,60 62,52 C65,58 66,70 58,80 C53,86 45,89 38,88 Z" fill="url(#nbLeafGrad)"/>
+    <path d="M39,87 C46,76 52,65 60,54" stroke="#ffffff" stroke-width="1.2" opacity="0.5" fill="none"/>
+  </g>
+
+  <!-- ==============================================================================
+       2. TYPOGRAPHY: PackSense AI (Matching Headline Exactly)
+       ============================================================================== -->
+  <g transform="translate(68, 42)">
+    <!-- "PackSense AI" in Crisp White (#ffffff) -->
+    <text x="0" y="0" font-family="'Plus Jakarta Sans', Montserrat, -apple-system, system-ui, sans-serif" font-size="25" font-weight="900" fill="#ffffff" letter-spacing="-0.5">PackSense AI</text>
+
+    <!-- AI Pill Badge: Black background, bold white text, vertically centered with text -->
+    <g transform="translate(178, -18)">
+      <rect x="0" y="0" width="30" height="20" rx="5" fill="#000000"/>
+      <text x="15" y="14" font-family="'Plus Jakarta Sans', -apple-system, system-ui, sans-serif" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">AI</text>
+    </g>
+  </g>
+</svg>

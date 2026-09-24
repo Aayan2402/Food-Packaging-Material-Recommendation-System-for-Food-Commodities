@@ -1,0 +1,47 @@
+{
+  "section_title": "Maharashtra FDA & Tukaram Munde Context",
+  "institutional_distinction": {
+    "fssai": {
+      "name": "Food Safety and Standards Authority of India (FSSAI)",
+      "level": "National / Union Statutory Authority",
+      "mandate": "Formulates uniform science-based food standards, regulations, packaging laws (e.g. FSS Packaging Regulations 2018), licensing guidelines, and national testing protocols under the Food Safety and Standards Act, 2006."
+    },
+    "maharashtra_fda": {
+      "name": "Food and Drug Administration, Maharashtra (FDA Maharashtra)",
+      "level": "State Government Department (Maharashtra)",
+      "mandate": "Enforces the Food Safety and Standards Act, 2006 across Maharashtra. Conducts market inspections, surveillance, sampling, laboratory testing, seizure of spurious goods, cancellation of licenses, and prosecution in consumer interest."
+    },
+    "tukaram_munde": {
+      "identity": "Senior Indian Administrative Service (IAS) Officer",
+      "tenure_context": "Appointed Commissioner of the Food and Drug Administration (FDA) Maharashtra (late 2022 to early 2023).",
+      "distinction_rule": "These requirements arise from the applicable FSSAI/Government regulatory framework. Maharashtra FDA enforcement and public food-safety activities during the relevant period can be discussed separately.",
+      "strict_attribution_guideline": "Never claim that Tukaram Munde authored or enacted FSSAI regulations. FSSAI rules are national parliamentary/statutory codes. Tukaram Munde led intensive state-level administrative implementation, strict compliance audits, and anti-adulteration crackdowns."
+    }
+  },
+  "documented_enforcement_actions": [
+    {
+      "topic": "Milk and Dairy Adulteration Crackdown",
+      "context": "Special intensive surveillance drives across Mumbai, Pune, Nashik, and highway toll nakas to intercept synthetic milk, adulterated paneer, and spurious mawa/khoya.",
+      "action_details": "Coordinated early-morning highway inspections, deployed mobile food testing vans, tested samples for chemical adulterants (detergents, starch, urea, refined oil), and seized thousands of kilograms of substandard products during festive seasons like Diwali."
+    },
+    {
+      "topic": "Edible Oil & Blended Fat Surveillance",
+      "context": "Drive against loose edible oils and adulteration with cheap industrial or mineral oils.",
+      "action_details": "Strict enforcement of the FSSAI ban on sale of loose, unbranded edible oils, ensuring tamper-evident packaging and mandatory labeling to protect consumer health."
+    },
+    {
+      "topic": "Food Packaging and Hygiene Enforcement in Food Establishments",
+      "context": "Mandating hygiene compliance under Schedule 4 of the FSS Act, 2006 across sweet manufacturers, cloud kitchens, bakeries, and street vendors.",
+      "action_details": "Enforcement of the prohibition on using newspaper to serve or wrap oily fried snacks (vada pav, samosas, bhajiya), penalizing repeat offenders, and directing eateries to switch to food-grade butter paper or leaf plates."
+    },
+    {
+      "topic": "Transparency and Rapid Sample Processing",
+      "context": "Strengthening state food testing laboratories and expediting chemical analysis turnaround times.",
+      "action_details": "Directives issued to state food testing laboratories in Mumbai, Pune, and Aurangabad to eliminate backlogs and accelerate court prosecutions against repeat adulterators."
+    }
+  ],
+  "verification_protocol": {
+    "unverified_claim_response": "I could not verify this claim from an official source.",
+    "rule_statement": "The chatbot must never invent dates, government resolution (GR) numbers, penalties, or quotes. Only documented public records and official notifications are cited."
+  }
+}

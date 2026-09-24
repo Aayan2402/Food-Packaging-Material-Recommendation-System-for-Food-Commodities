@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 2rem auto 4rem; padding: 0 1.5rem;">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--deep-navy); letter-spacing: -0.02em;">
+        {{ t('history_title') }}
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        {{ t('opt_history_subtitle') }}
+      </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <button type="button" class="btn btn-outline btn-sm" id="clearAllHistBtn" style="color: #dc2626; border-color: #fca5a5; font-weight: 700; transition: all 0.2s ease;" onclick="clearAllHistory(this)">
+        {{ t('btn_clear_history') }}
+      </button>
+      <a href="{{ url_for('workspace', lang=active_lang) }}" class="btn btn-primary btn-sm">
+        + {{ t('nav_workspace') }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Browser LocalStorage Records Table (Requirement 4) -->
+  <div style="background: white; border: 1.5px solid var(--border-card); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow-x: auto; margin-bottom: 2.5rem;">
+    <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-card); background: #f8fafc; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--deep-navy); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        💻 {{ t('opt_history_title') }}
+      </h3>
+      <span style="font-size: 0.75rem; background: #ecfdf5; color: #059669; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px;">
+        Instant Client Storage
+      </span>
+    </div>
+
+    <table class="comp-table" id="clientHistoryTable">
+      <thead>
+        <tr>
+          <th>{{ t('hist_date_time') }}</th>
+          <th>{{ t('hist_food_product') }}</th>
+          <th>{{ t('hist_mode') }}</th>
+          <th>{{ t('hist_duration') }}</th>
+          <th>{{ t('origin_city') }}</th>
+          <th>{{ t('destination_city') }}</th>
+          <th>{{ t('hist_recommended_pack') }}</th>
+          <th>{{ t('hist_sustainability_score') }}</th>
+          <th>{{ t('hist_action') }}</th>
+        </tr>
+      </thead>
+      <tbody id="clientHistoryTbody">
+        <tr>
+          <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+            {{ t('loading_history') }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {% if analyses %}
+  <!-- Database History (SQLite) -->
+  <div style="background: white; border: 1px solid var(--border-card); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow-x: auto;">
+    <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-card); background: #f8fafc;">
+      <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--deep-navy); margin: 0;">
+        🗄️ Database Records
+      </h3>
+    </div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>{{ t('hist_date_time') }}</th>
+          <th>{{ t('hist_food_product') }}</th>
+          <th>{{ t('hist_corridor') }}</th>
+          <th>{{ t('hist_recommended_pack') }}</th>
+          <th>ASTM Targets</th>
+          <th>{{ t('expected_shelf_life') }}</th>
+          <th>{{ t('hist_action') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in analyses %}
+          <tr>
+            <td style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">
+              {{ a.created_at }}
+            </td>
+            <td>
+              <strong>{{ a.food_name }}</strong>
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">{{ a.condition }} ({{ a.storage_type }})</span>
+            </td>
+            <td style="font-size: 0.85rem;">
+              <span style="font-weight: 700; color: var(--deep-navy);">{{ a.origin }}</span> → <span style="font-weight: 700; color: #0284c7;">{{ a.destination }}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">{{ a.transit_days }} {{ t('days') }} ({{ a.season }})</span>
+            </td>
+            <td>
+              <span style="font-weight: 700; color: var(--primary-green-dark);">{{ a.primary_material }}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">{{ a.optimized_gauge }}</span>
+            </td>
+            <td style="font-size: 0.8rem;">
+              <div>OTR: <strong>{{ a.otr_target }}</strong></div>
+              <div>WVTR: <strong>{{ a.wvtr_target }}</strong></div>
+            </td>
+            <td>
+              <span class="badge-gain">{{ a.shelf_life_original }}d → {{ a.shelf_life_extended }}d</span>
+            </td>
+            <td style="white-space: nowrap;">
+              <div style="display: flex; gap: 0.4rem; align-items: center;">
+                <a href="{{ url_for('view_recommendation', analysis_id=a.id, lang=active_lang) }}" class="btn btn-outline btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">
+                  📄 View PDF Spec
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'packsense_analysis_history';
+
+  function renderClientHistory() {
+    const tbody = document.getElementById('clientHistoryTbody');
+    if (!tbody) return;
+
+    let history = [];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) history = JSON.parse(raw);
+    } catch (e) {
+      console.error(e);
+    }
+
+    if (history.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+            No browser optimization history yet. Run an analysis in the <a href="{{ url_for('workspace') }}" style="color: var(--primary-green-dark); font-weight: 700;">Workspace</a> to save records automatically.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = history.map((rec, index) => `
+      <tr style="cursor: pointer;" onclick="openAnalysis(${index})">
+        <td style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">
+          ${rec.dateTime || 'Recently'}
+        </td>
+        <td>
+          <strong style="color: var(--deep-navy);">${rec.foodName}</strong>
+          <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">${rec.condition || 'Fresh'}</span>
+        </td>
+        <td>
+          <span style="font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 999px; ${rec.mode === 'industry' ? 'background: #e0f2fe; color: #0369a1;' : 'background: #dcfce7; color: #15803d;'}">
+            ${rec.mode === 'industry' ? 'Industry / Lab' : 'Farmer / SME'}
+          </span>
+        </td>
+        <td style="font-size: 0.82rem;">
+          <strong>${rec.storageDurationText || rec.totalDays + ' Days'}</strong>
+        </td>
+        <td style="font-size: 0.82rem; font-weight: 600;">
+          ${rec.origin}
+        </td>
+        <td style="font-size: 0.82rem; font-weight: 600; color: #0284c7;">
+          ${rec.destination}
+        </td>
+        <td style="font-size: 0.82rem;">
+          <span style="font-weight: 700; color: #065f46;">${rec.recommendedPackaging}</span>
+        </td>
+        <td>
+          <span class="badge-gain" style="background: #ecfdf5; color: #059669; font-weight: 800;">
+            ${rec.sustainabilityScore} / 10
+          </span>
+        </td>
+        <td>
+          <button type="button" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 0.25rem 0.6rem;" onclick="event.stopPropagation(); openAnalysis(${index});">
+            🔍 View Analysis
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function openAnalysis(index) {
+    let history = [];
+    try {
+      history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch(e) {}
+    const rec = history[index];
+    if (rec) {
+      window.location.href = "{{ url_for('workspace') }}?food=" + encodeURIComponent(rec.foodName) + "&mode=" + encodeURIComponent(rec.mode || 'farmer');
+    }
+  }
+
+  function clearAllHistory(btn) {
+    if (!btn) btn = document.getElementById('clearAllHistBtn');
+    
+    // Clear client localStorage keys immediately
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('packsense_analyses_history');
+    } catch(e) {
+      console.error(e);
+    }
+
+    // Clear server records as well
+    fetch('/history/clear?format=json', { 
+      method: 'POST', 
+      headers: { 'X-Requested-With': 'XMLHttpRequest' } 
+    }).then(() => {
+      window.location.reload();
+    }).catch(() => {
+      renderClientHistory();
+    });
+
+    renderClientHistory();
+  }
+
+  document.addEventListener('DOMContentLoaded', renderClientHistory);
+</script>
+{% endblock %}

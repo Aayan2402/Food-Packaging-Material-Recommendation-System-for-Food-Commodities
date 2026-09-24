@@ -1,0 +1,885 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="workspace-container">
+  <!-- Workspace Header -->
+  <div class="workspace-header">
+    <div class="workspace-title-group">
+      <h1>{{ t('app_name') }} {{ t('nav_workspace') }}</h1>
+      <p>{{ t('hero_subtitle') }}</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('packaudit', lang=active_lang) }}" class="btn btn-outline btn-sm">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        {{ t('nav_packaudit') }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Workspace Form wrapping Channels A, B, C -->
+  <form action="{{ url_for('run_analysis', lang=active_lang) }}" method="POST" enctype="multipart/form-data" id="analysisForm">
+    <input type="hidden" name="lang" id="formLangInput" value="{{ active_lang }}">
+    <div class="workspace-grid">
+
+      <!-- ============================================================== -->
+      <!-- LEFT COLUMN: Three Intelligent Channels (Inputs) -->
+      <!-- ============================================================== -->
+      <div class="workspace-left-col">
+
+        <!-- Mode Switcher Tabs: Farmer/SME Mode vs Industry/Lab Mode -->
+        <div class="mode-toggle-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span style="font-size: 0.8rem; font-weight: 800; color: var(--deep-navy);">WORKSPACE TARGET AUDIENCE:</span>
+              <span id="activeModeBadge" style="font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px; margin-left: 0.35rem; background: {% if active_mode == 'industry' %}#dbeafe; color: #1e40af; border: 1px solid #bfdbfe;{% else %}#dcfce7; color: #166534; border: 1px solid #bbf7d0;{% endif %}">
+                {% if active_mode == 'industry' %}🔬 Industry / Lab Mode Active{% else %}👨‍🌾 Farmer / SME Mode Active{% endif %}
+              </span>
+            </div>
+            <button type="button" id="quickApplyRecalcBtn" onclick="applyModeAndRecalculate()" class="btn btn-sm btn-primary" style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 999px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: inline-flex; align-items: center; gap: 0.35rem;">
+              <span>⚡ Apply & Recalculate</span>
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <button type="button" class="mode-tab-btn {% if active_mode != 'industry' %}active{% endif %}" id="farmerModeBtn" onclick="setMode('farmer')">
+              <span class="mode-title">👨‍🌾 {{ t('mode_farmer') }}</span>
+              <span class="mode-subtitle">{{ t('mode_farmer_subtitle') }}</span>
+            </button>
+            <button type="button" class="mode-tab-btn {% if active_mode == 'industry' %}active{% endif %}" id="industryModeBtn" onclick="setMode('industry')">
+              <span class="mode-title">🔬 {{ t('mode_industry') }}</span>
+              <span class="mode-subtitle">{{ t('mode_industry_subtitle') }}</span>
+            </button>
+          </div>
+
+          <div id="modeSwitchBanner" style="display: none; margin-top: 0.65rem; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.785rem; line-height: 1.4;">
+          </div>
+        </div>
+        <input type="hidden" name="mode" id="selectedModeInput" value="{{ active_mode or 'farmer' }}">
+
+        <!-- CHANNEL A: User Profile Input -->
+        <div class="channel-card" id="channelACard">
+          <div class="channel-card-header">
+            <div class="channel-tag">
+              <span class="channel-badge">CHANNEL A</span>
+              <span>{{ t('lbl_channel_a') }}</span>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Biochemical Profiler</span>
+          </div>
+
+          <!-- Food Item Selection -->
+          <div class="form-group">
+            <label class="form-label" for="foodSelect">{{ t('lbl_food_item') }} *</label>
+            <select name="food_name" id="foodSelect" class="form-select" required onchange="handleFoodChange(this.value)">
+              {% for f in all_foods %}
+                {% set trans_key = 'food_' + f.name.lower().replace(' ', '_') %}
+                {% set trans_val = t(trans_key) %}
+                <option value="{{ f.name }}" {% if selected_food and selected_food.name == f.name %}selected{% endif %}>
+                  {{ trans_val if not trans_val.startswith('food_') else f.name }} ({{ f.category }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-row-2">
+            <!-- Food Condition -->
+            <div class="form-group">
+              <label class="form-label" for="conditionSelect">{{ t('lbl_food_condition') }}</label>
+              <select name="condition" id="conditionSelect" class="form-select">
+                <option value="Fresh" {% if form_data.condition == 'Fresh' %}selected{% endif %}>{{ t('cond_fresh') }}</option>
+                <option value="Raw" {% if form_data.condition == 'Raw' %}selected{% endif %}>{{ t('cond_raw') }}</option>
+                <option value="Fried" {% if form_data.condition == 'Fried' %}selected{% endif %}>{{ t('cond_fried') }}</option>
+                <option value="Processed" {% if form_data.condition == 'Processed' %}selected{% endif %}>{{ t('cond_processed') }}</option>
+              </select>
+            </div>
+
+            <!-- Target Storage Duration -->
+            <div class="form-group">
+              <label class="form-label" for="durationInput">{{ t('lbl_target_duration') }}</label>
+              <input type="number" name="storage_duration" id="durationInput" class="form-input" min="1" max="180" value="{{ form_data.storage_duration or 7 }}">
+            </div>
+          </div>
+
+          <!-- Storage Type -->
+          <div class="form-group">
+            <label class="form-label" for="storageTypeSelect">{{ t('lbl_storage_type') }}</label>
+            <select name="storage_type" id="storageTypeSelect" class="form-select">
+              <option value="Ambient" {% if form_data.storage_type == 'Ambient' %}selected{% endif %}>{{ t('store_ambient') }}</option>
+              <option value="Refrigerated" {% if form_data.storage_type == 'Refrigerated' %}selected{% endif %}>{{ t('store_refrigerated') }}</option>
+              <option value="Cold Storage" {% if form_data.storage_type == 'Cold Storage' %}selected{% endif %}>{{ t('store_cold') }}</option>
+            </select>
+          </div>
+
+          <!-- Active Food Science Traits (Auto-Fetched from SQL Database) -->
+          <div style="background: var(--bg-card-subtle); border-radius: var(--radius-sm); padding: 0.85rem; margin-top: 0.75rem; border: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--deep-navy);">SQL KNOWLEDGE BASE ATTRIBUTES</span>
+              <span style="font-size: 0.7rem; color: #10b981; font-weight: 700;">● Auto-Calibrated</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; font-size: 0.75rem;">
+              <div><strong>Respiration:</strong> <span id="dispRespiration">{{ selected_food.respiration_rate if selected_food else 'High' }}</span></div>
+              <div><strong>Fat Vulnerability:</strong> <span id="dispFatVuln">{{ selected_food.fat_vulnerability if selected_food else 'Low' }}</span></div>
+              <div><strong>Ethylene:</strong> <span id="dispEthylene">{{ selected_food.ethylene_emission if selected_food else 'Low' }}</span></div>
+              <div><strong>Moisture Risk:</strong> <span id="dispMoisture">{{ selected_food.moisture_sensitivity if selected_food else 'High' }}</span></div>
+              <div><strong>Microbial Risk:</strong> <span id="dispMicrobial">{{ selected_food.microbial_risk if selected_food else 'Critical' }}</span></div>
+              <div><strong>Optimal Temp:</strong> <span id="dispOptTemp">{{ selected_food.opt_temp_c if selected_food else '2.0' }}°C</span></div>
+            </div>
+          </div>
+
+          <!-- FARMER MODE EXPLANATORY HINT -->
+          <div id="farmerModeHint" style="margin-top: 0.75rem; font-size: 0.785rem; color: #15803d; background: #f0fdf4; border: 1px dashed #86efac; border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; display: {% if active_mode == 'industry' %}none{% else %}block{% endif %};">
+            🌱 <strong>Farmer Mode Active:</strong> Lab biochemical parameters (respiration, moisture risk) are auto-calibrated from the SQL Knowledge Base. If you need custom ASTM OTR / WVTR / Seal inputs, switch to <strong><a href="javascript:void(0)" onclick="setMode('industry')" style="color: #166534; text-decoration: underline; font-weight: 700;">Industry Mode</a></strong>.
+          </div>
+
+          <!-- INDUSTRY / LAB MODE ADVANCED PARAMETERS (Section 8) -->
+          <div id="industryParamsSection" style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed #cbd5e1; display: {% if active_mode == 'industry' %}block{% else %}none{% endif %};">
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--navy-accent); margin-bottom: 0.75rem;">
+              🔬 Industry Lab Calibration Parameters
+            </div>
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_initial_moisture') }}</label>
+                <input type="number" step="0.1" name="initial_moisture" class="form-input" placeholder="e.g. 14.5" value="{{ form_data.initial_moisture or '' }}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_free_fat') }}</label>
+                <input type="number" step="0.1" name="free_fat" class="form-input" placeholder="e.g. 32.0" value="{{ form_data.free_fat or '' }}">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_manual_otr') }}</label>
+                <input type="number" step="1" name="manual_otr" class="form-input" placeholder="e.g. 1800" value="{{ form_data.manual_otr or '' }}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_manual_wvtr') }}</label>
+                <input type="number" step="0.1" name="manual_wvtr" class="form-input" placeholder="e.g. 15.0" value="{{ form_data.manual_wvtr or '' }}">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_seal_strength') }}</label>
+                <input type="number" step="0.5" name="seal_strength" class="form-input" placeholder="e.g. 18.0" value="{{ form_data.seal_strength or '' }}">
+              </div>
+              <div class="form-group">
+                <label class="form-label">{{ t('lbl_film_thickness') }}</label>
+                <input type="number" name="film_thickness" class="form-input" placeholder="e.g. 50" value="{{ form_data.film_thickness or '' }}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHANNEL B: Visual PackAudit Input (Section 9) -->
+        <div class="channel-card" id="channelBCard">
+          <div class="channel-card-header">
+            <div class="channel-tag">
+              <span class="channel-badge" style="background: #e0f2fe; color: #0284c7;">CHANNEL B</span>
+              <span id="channelBTitleText">{% if active_mode == 'industry' %}🔬 Lab Computer Vision & Spectroscopy{% else %}👨‍🌾 Quick Photo Scan (Visual PackAudit){% endif %}</span>
+            </div>
+            <span id="channelBModeTag" style="font-size: 0.75rem; font-weight: 700; color: {% if active_mode == 'industry' %}#1e40af{% else %}#15803d{% endif %}; background: {% if active_mode == 'industry' %}#eff6ff{% else %}#f0fdf4{% endif %}; padding: 0.15rem 0.5rem; border-radius: 999px;">
+              {% if active_mode == 'industry' %}Industry / Lab Mode{% else %}Farmer / SME Mode{% endif %}
+            </span>
+          </div>
+
+          <p id="channelBDesc" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.85rem; line-height: 1.45;">
+            {% if active_mode == 'industry' %}
+              Upload high-resolution packaging sample, cross-section microscopy, or pouch surface photo. PackSense AI measures specular glint reflectivity %, optical transmission haze, edge defect gradients, and ASTM F88 seal peel compliance.
+            {% else %}
+              Take a quick mobile phone picture of your farm produce crate, gunny bag, polythene pouch, carton, or punnet. PackSense AI scans for bag tears, water sweat drops, missing ventilation holes, and seal leakage before you ship to the mandi.
+            {% endif %}
+          </p>
+
+          <div style="border: 2px dashed #cbd5e1; border-radius: var(--radius-sm); padding: 1.25rem; text-align: center; background: #fdfefe;">
+            <input type="file" name="packaging_image" id="packagingImageInput" accept="image/*" style="display: none;" onchange="previewUpload(event)">
+            <label for="packagingImageInput" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="channelBUploadTitle" style="font-size: 0.9rem; font-weight: 700; color: var(--primary-green-dark);">
+                {% if active_mode == 'industry' %}Upload Packaging Test Specimen{% else %}Upload Farm Bag, Crate, or Pouch Photo{% endif %}
+              </span>
+              <span id="channelBUploadSub" style="font-size: 0.75rem; color: var(--text-muted);">
+                {% if active_mode == 'industry' %}High-res microscopy, seal cross-section, or ASTM test pouch{% else %}Phone photo of gunny sack, polybag, fruit box, or crate{% endif %}
+              </span>
+            </label>
+            <div id="imagePreviewContainer" style="display: none; margin-top: 0.75rem;">
+              <img id="imagePreview" src="#" alt="Preview" style="max-height: 120px; border-radius: 6px; border: 1px solid #cbd5e1;">
+            </div>
+          </div>
+
+          {% if audit_result %}
+            <!-- FARMER / SME MODE IMAGE AUDIT RESULT -->
+            <div id="auditResultFarmerView" style="display: {% if active_mode == 'industry' %}none{% else %}block{% endif %}; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 0.85rem; margin-top: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+                <span style="font-size: 0.8rem; font-weight: 800; color: #166534;">👨‍🌾 MANDI SPOILAGE SCAN:</span>
+                <span style="font-size: 1.15rem; font-weight: 900; color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+                  {{ audit_result.vulnerability_score }} / 10
+                  <span style="font-size: 0.75rem; font-weight: 700;">
+                    {% if audit_result.vulnerability_score > 6 %}(High Rot Risk){% elif audit_result.vulnerability_score > 3 %}(Moderate Risk){% else %}(Safe Pack){% endif %}
+                  </span>
+                </span>
+              </div>
+              
+              <div style="font-size: 0.8rem; color: #14532d; line-height: 1.45;">
+                <div style="margin-bottom: 0.35rem;">
+                  <strong>Detected Pack:</strong> 
+                  <span>{{ audit_result.farmer_info.detected_name if audit_result.farmer_info else audit_result.detected_type }}</span>
+                </div>
+                <div style="background: #ffffff; padding: 0.5rem; border-radius: 4px; border-left: 3px solid #f59e0b; margin-bottom: 0.35rem; color: #78350f;">
+                  <strong>⚠️ Spoilage Risk in Transit:</strong> 
+                  {{ audit_result.farmer_info.spoilage_risk if audit_result.farmer_info else audit_result.vulnerability_reason }}
+                </div>
+                <div style="background: #ffffff; padding: 0.5rem; border-radius: 4px; border-left: 3px solid #10b981; margin-bottom: 0.35rem; color: #166534;">
+                  <strong>💡 What You Should Do:</strong> 
+                  {{ audit_result.farmer_info.practical_action if audit_result.farmer_info else audit_result.recommended_upgrade }}
+                </div>
+                <div style="font-size: 0.75rem; color: #15803d; font-weight: 700;">
+                  💰 {{ audit_result.farmer_info.loss_prevention_est if audit_result.farmer_info else 'Prevents significant transit spoilage losses.' }}
+                </div>
+              </div>
+            </div>
+
+            <!-- INDUSTRY / LAB MODE IMAGE AUDIT RESULT -->
+            <div id="auditResultIndustryView" style="display: {% if active_mode == 'industry' %}block{% else %}none{% endif %}; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); padding: 0.85rem; margin-top: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+                <span style="font-size: 0.8rem; font-weight: 800; color: #1e40af;">🔬 ASTM SPECTROSCOPY & DEFECT AUDIT:</span>
+                <span style="font-size: 1.15rem; font-weight: 900; color: {% if audit_result.vulnerability_score > 6 %}#ef4444{% elif audit_result.vulnerability_score > 3 %}#f59e0b{% else %}#10b981{% endif %};">
+                  {{ audit_result.vulnerability_score }} / 10
+                  <span style="font-size: 0.75rem; font-weight: 700;">
+                    {% if audit_result.vulnerability_score > 6 %}(Critical Non-Compliance){% elif audit_result.vulnerability_score > 3 %}(Sub-optimal Barrier){% else %}(Compliant Barrier){% endif %}
+                  </span>
+                </span>
+              </div>
+
+              <!-- Lab 4-Metric Grid -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; background: #ffffff; padding: 0.5rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid #dbeafe; margin-bottom: 0.5rem;">
+                <div><span style="color: #64748b;">Optical Opacity:</span> <strong>{{ audit_result.opacity_pct }}%</strong></div>
+                <div><span style="color: #64748b;">Specular Reflectivity:</span> <strong>{{ audit_result.reflectivity_pct }}%</strong></div>
+                <div><span style="color: #64748b;">Seal Integrity:</span> <strong>{{ audit_result.seal_integrity }}</strong></div>
+                <div><span style="color: #64748b;">Substrate:</span> <strong>{{ audit_result.industry_info.detected_name.split(':')[1] if audit_result.industry_info and ':' in audit_result.industry_info.detected_name else audit_result.detected_type }}</strong></div>
+              </div>
+
+              <div style="font-size: 0.785rem; color: #1e3a8a; line-height: 1.45;">
+                <div style="margin-bottom: 0.35rem;">
+                  <strong>Defect Spectroscopy:</strong> 
+                  <span>{{ audit_result.industry_info.defect_spectroscopy if audit_result.industry_info else audit_result.vulnerability_reason }}</span>
+                </div>
+                <div style="background: #ffffff; padding: 0.5rem; border-radius: 4px; border-left: 3px solid #2563eb; color: #1e40af;">
+                  <strong>⚙️ Machine Remediation:</strong> 
+                  {{ audit_result.industry_info.engineering_remediation if audit_result.industry_info else audit_result.recommended_upgrade }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- CHANNEL C: India Logistics & Climate Stress (Section 10 & 18) -->
+        <div class="channel-card" id="channelCCard">
+          <div class="channel-card-header">
+            <div class="channel-tag">
+              <span class="channel-badge" style="background: #fef3c7; color: #b45309;">CHANNEL C</span>
+              <span>{{ t('lbl_channel_c') }}</span>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Route Stress Engine</span>
+          </div>
+
+          <!-- Origin & Destination -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="originSelect">{{ t('lbl_origin') }}</label>
+              <select name="origin" id="originSelect" class="form-select">
+                {% for c in all_cities %}
+                  <option value="{{ c.city }}" {% if (form_data.origin or 'Pune') == c.city %}selected{% endif %}>{{ c.city }} ({{ c.state }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="destSelect">{{ t('lbl_destination') }}</label>
+              <select name="destination" id="destSelect" class="form-select">
+                {% for c in all_cities %}
+                  <option value="{{ c.city }}" {% if (form_data.destination or 'Chennai') == c.city %}selected{% endif %}>{{ c.city }} ({{ c.state }})</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <!-- Transport Mode -->
+            <div class="form-group">
+              <label class="form-label" for="transportModeSelect">{{ t('lbl_transport_mode') }}</label>
+              <select name="transport_mode" id="transportModeSelect" class="form-select">
+                <option value="Ambient Open Truck" {% if form_data.transport_mode == 'Ambient Open Truck' %}selected{% endif %}>{{ t('trans_open_truck') }}</option>
+                <option value="Refrigerated Truck" {% if form_data.transport_mode == 'Refrigerated Truck' %}selected{% endif %}>{{ t('trans_refrig_truck') }}</option>
+                <option value="Certified Cold Chain" {% if form_data.transport_mode == 'Certified Cold Chain' %}selected{% endif %}>{{ t('trans_cold_chain') }}</option>
+                <option value="Rail Transport" {% if form_data.transport_mode == 'Rail Transport' %}selected{% endif %}>{{ t('trans_rail') }}</option>
+              </select>
+            </div>
+
+            <!-- Transit Days & Season -->
+            <div class="form-group">
+              <label class="form-label" for="seasonSelect">{{ t('lbl_season') }}</label>
+              <select name="season" id="seasonSelect" class="form-select">
+                <option value="Monsoon" {% if (form_data.season or 'Monsoon') == 'Monsoon' %}selected{% endif %}>{{ t('season_monsoon') }}</option>
+                <option value="Summer" {% if form_data.season == 'Summer' %}selected{% endif %}>{{ t('season_summer') }}</option>
+                <option value="Winter" {% if form_data.season == 'Winter' %}selected{% endif %}>{{ t('season_winter') }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Transit Duration in Days -->
+          <div class="form-group">
+            <label class="form-label" for="transitDaysInput">{{ t('lbl_transit_days') }}</label>
+            <input type="number" name="transit_days" id="transitDaysInput" class="form-input" min="1" max="15" value="{{ form_data.transit_days or 4 }}">
+          </div>
+
+          <!-- Visual Route Card: PUNE -> TRANSPORT -> CHENNAI (Section 10) -->
+          <div class="route-visual-card">
+            <div class="route-steps-flow">
+              <div class="route-step-node">
+                <div class="node-pin"></div>
+                <span id="routeOriginDisp">{{ form_data.origin or 'PUNE' }}</span>
+              </div>
+              <div class="route-step-arrow">
+                <span style="font-size: 0.7rem; color: #64748b; display: block; text-align: center;">HIGHWAY</span>
+                → → →
+              </div>
+              <div class="route-step-node">
+                <div class="node-pin" style="background: #0284c7;"></div>
+                <span id="routeDestDisp">{{ form_data.destination or 'CHENNAI' }}</span>
+              </div>
+            </div>
+
+            <!-- Climate & Route Stress Progress Bars (Section 18) -->
+            <div class="stress-metrics-list">
+              <!-- Total Climate Stress -->
+              <div class="stress-row">
+                <span class="stress-label">{{ t('lbl_climate_stress') }}</span>
+                <div class="progress-track">
+                  <div class="progress-fill fill-red" style="width: {{ result.climate_stress_score if result else 80 }}%;"></div>
+                </div>
+                <span class="stress-value">{{ result.climate_stress_score if result else 80 }}%</span>
+              </div>
+
+              <!-- Humidity Risk -->
+              <div class="stress-row">
+                <span class="stress-label">{{ t('lbl_humidity_risk') }}</span>
+                <div class="progress-track">
+                  <div class="progress-fill fill-blue" style="width: {{ result.humidity_risk_score if result else 90 }}%;"></div>
+                </div>
+                <span class="stress-value">{{ result.humidity_risk_score if result else 90 }}%</span>
+              </div>
+
+              <!-- Temperature Risk -->
+              <div class="stress-row">
+                <span class="stress-label">{{ t('lbl_temp_risk') }}</span>
+                <div class="progress-track">
+                  <div class="progress-fill fill-amber" style="width: {{ result.temperature_risk_score if result else 60 }}%;"></div>
+                </div>
+                <span class="stress-value">{{ result.temperature_risk_score if result else 60 }}%</span>
+              </div>
+
+              <!-- Transit Risk -->
+              <div class="stress-row">
+                <span class="stress-label">{{ t('lbl_transit_risk') }}</span>
+                <div class="progress-track">
+                  <div class="progress-fill fill-green" style="width: {{ result.transit_risk_score if result else 70 }}%;"></div>
+                </div>
+                <span class="stress-value">{{ result.transit_risk_score if result else 70 }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RUN BUTTON -->
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; box-shadow: var(--shadow-glow);" id="runPackSenseBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {{ t('btn_run_engine') }}
+        </button>
+
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- RIGHT COLUMN: AI Engine + Recommendations + Scorecards -->
+      <!-- ============================================================== -->
+      <div class="workspace-right-col">
+
+        <!-- 1. AI Engine Card (Section 11) -->
+        <div class="ai-engine-card" id="aiEngineCard">
+          <div class="ai-engine-header">
+            <div class="ai-engine-title-group">
+              <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                {{ t('engine_title') }}
+              </h2>
+              <p>{{ t('engine_subtitle') }}</p>
+            </div>
+            <span class="ai-engine-chip">✓ {{ t('status_complete') }}</span>
+          </div>
+
+          <!-- 4 Stages Display (Section 11) -->
+          <div class="engine-stages-grid">
+            <div class="stage-pill active">
+              <div class="stage-check">✓</div>
+              <div class="stage-label">{{ t('stage_biochemical') }}</div>
+            </div>
+            <div class="stage-pill active">
+              <div class="stage-check">✓</div>
+              <div class="stage-label">{{ t('stage_climate') }}</div>
+            </div>
+            <div class="stage-pill active">
+              <div class="stage-check">✓</div>
+              <div class="stage-label">{{ t('stage_constraint') }}</div>
+            </div>
+            <div class="stage-pill active">
+              <div class="stage-check">✓</div>
+              <div class="stage-label">{{ t('stage_matching') }}</div>
+            </div>
+          </div>
+        </div>
+
+        {% if result %}
+          <!-- Workspace PDF & Print Actions Toolbar -->
+          <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; background: #ffffff; border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 0.85rem 1.25rem; box-shadow: var(--shadow-sm); flex-wrap: wrap; gap: 0.75rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--deep-navy); display: flex; align-items: center; gap: 0.5rem;">
+              <span>⚡ {{ t('food_' + (result.food.name.lower().replace(' ', '_') if result.food else 'other')) if result.food else (result.food_name or 'Optimization') }}</span>
+              <span class="badge-gain" style="font-size: 0.75rem;">+{{ result.shelf_life_extension_pct }}% {{ t('extension_gain') }}</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              {% if analysis_id %}
+                <a href="{{ url_for('view_recommendation', analysis_id=analysis_id, lang=active_lang) }}" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #0284c7; color: #ffffff; border-color: #0284c7; font-weight: 700;">
+                  📄 {{ t('nav_spec_sheet') }} (PSA-{{ "%06d"|format(analysis_id) if analysis_id < 1000 else analysis_id }})
+                </a>
+              {% endif %}
+              <button type="button" onclick="downloadReportPDF('workspaceResultsContainer', 'PackSense_{{ result.food_name }}_Specification.pdf', this)" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                📥 {{ t('btn_save_pdf') }}
+              </button>
+            </div>
+          </div>
+
+          <div id="workspaceResultsContainer" class="printable-report">
+
+          <!-- Farmer Mode Action Banner -->
+          <div id="recFarmerModeCard" style="display: {% if active_mode == 'industry' %}none{% else %}block{% endif %}; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+              <span style="background: #166534; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+                👨‍🌾 FARMER / SME PRACTICAL SOLUTION
+              </span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #15803d;">
+                {{ result.farmer_view.unit_cost_text if result.farmer_view else 'Low Cost Farm Packing' }}
+              </span>
+            </div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #14532d; margin-bottom: 0.4rem;">
+              {{ result.farmer_view.solution_title if result.farmer_view else 'Perforated Breathable Produce Box' }}
+            </h3>
+            <p style="font-size: 0.85rem; color: #166534; margin-bottom: 0.65rem;">
+              {{ result.farmer_view.mandi_economic_benefit if result.farmer_view else 'Protects produce from transit sweating and spoilage.' }}
+            </p>
+            <div style="background: #ffffff; border-radius: 6px; padding: 0.75rem; font-size: 0.8rem; color: #14532d; border-left: 4px solid #10b981;">
+              <strong>👨‍🌾 Quick Farmer Action Guide:</strong> {{ result.farmer_view.handling_tips if result.farmer_view else 'Pack during early morning, line crates with paper cushion, keep ventilated.' }}
+            </div>
+          </div>
+
+          <!-- Industry / Lab Mode Technical Banner -->
+          <div id="recIndustryModeCard" style="display: {% if active_mode == 'industry' %}block{% else %}none{% endif %}; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+              <span style="background: #1e40af; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+                🔬 ASTM PACKAGING LAB SPECIFICATION
+              </span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: #1d4ed8;">
+                {{ result.industry_view.sustainability_carbon if result.industry_view else 'Down-Gauged Resin' }}
+              </span>
+            </div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.5rem;">
+              {{ result.industry_view.spec_title if result.industry_view else result.primary_material }}
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; font-size: 0.785rem; color: #1e40af; background: #ffffff; padding: 0.75rem; border-radius: 6px; border: 1px solid #bfdbfe;">
+              <div><strong>Gas Headspace:</strong> {{ result.industry_view.gas_headspace_spec if result.industry_view else 'Active MAP' }}</div>
+              <div><strong>Hermetic Seal:</strong> {{ result.industry_view.astm_f88_seal if result.industry_view else 'ASTM F88' }}</div>
+              <div><strong>ASTM D3985 OTR:</strong> {{ result.industry_view.astm_d3985_otr if result.industry_view else (result.otr_target ~ ' cc/m²/day') }}</div>
+              <div><strong>ASTM F1249 WVTR:</strong> {{ result.industry_view.astm_f1249_wvtr if result.industry_view else (result.wvtr_target ~ ' g/m²/day') }}</div>
+              <div style="grid-column: 1 / -1;"><strong>Polymer Layer:</strong> {{ result.industry_view.polymer_gauge if result.industry_view else result.optimized_gauge }}</div>
+            </div>
+          </div>
+
+          <!-- 2. AI Recommended Packaging (Section 14) -->
+          <div class="recommendation-card" id="primaryRecCard">
+            <div class="rec-badge-highlight">{{ t('rec_primary_sub') }}</div>
+            <h2 class="rec-primary-material">{{ result.primary_material }}</h2>
+            
+            <div class="rec-specs-grid">
+              <div>
+                <div class="spec-item-label">{{ t('rec_optimized_gauge') }}</div>
+                <div class="spec-item-val">{{ result.optimized_gauge }}</div>
+              </div>
+              <div>
+                <div class="spec-item-label">{{ t('rec_packaging_type') }}</div>
+                <div class="spec-item-val">{{ result.packaging_type }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. ASTM Barrier Targets (Section 15) -->
+          <div class="astm-targets-card" id="astmCard">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              {{ t('astm_title') }}
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              {{ t('astm_subtitle') }}
+            </p>
+
+            <div class="astm-grid">
+              <!-- OTR Target -->
+              <div class="astm-metric-box">
+                <span class="spec-item-label">{{ t('astm_otr_label') }}</span>
+                <div class="astm-metric-value">{{ result.otr_target }} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">cc/m²/day</span></div>
+                <p class="astm-desc">{{ t('astm_otr_explain') }}</p>
+              </div>
+
+              <!-- WVTR Target -->
+              <div class="astm-metric-box">
+                <span class="spec-item-label">{{ t('astm_wvtr_label') }}</span>
+                <div class="astm-metric-value">{{ result.wvtr_target }} <span style="font-size: 0.9rem; font-weight: 600; color: #64748b;">g/m²/day</span></div>
+                <p class="astm-desc">{{ t('astm_wvtr_explain') }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Active Gas Packaging (MAP Specification) (Section 16) -->
+          <div class="map-gas-card" id="mapGasCard">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              {{ t('map_title') }}
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              {{ t('map_subtitle') }}
+            </p>
+
+            <!-- Gas Ratio CSS Bar -->
+            <div class="gas-bar-container">
+              <div class="gas-segment-o2" style="width: {{ result.map_o2 }}%;">
+                O₂ {{ result.map_o2 }}%
+              </div>
+              <div class="gas-segment-co2" style="width: {{ result.map_co2 }}%;">
+                CO₂ {{ result.map_co2 }}%
+              </div>
+              <div class="gas-segment-n2" style="width: {{ result.map_n2 }}%;">
+                N₂ {{ result.map_n2 }}%
+              </div>
+            </div>
+
+            <div class="gas-legend">
+              <div class="gas-legend-item">
+                <div class="gas-dot" style="background: #ef4444;"></div>
+                <span>Oxygen (O₂): {{ result.map_o2 }}%</span>
+              </div>
+              <div class="gas-legend-item">
+                <div class="gas-dot" style="background: #3b82f6;"></div>
+                <span>Carbon Dioxide (CO₂): {{ result.map_co2 }}%</span>
+              </div>
+              <div class="gas-legend-item">
+                <div class="gas-dot" style="background: #10b981;"></div>
+                <span>Nitrogen (N₂): {{ result.map_n2 }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Smart Biodegradable Alternatives (Section 17) -->
+          <div class="biodegradable-card" id="bioCard">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #065f46;">
+                🌿 {{ t('bio_title') }}
+              </h3>
+              <span style="font-size: 0.75rem; background: #bbf7d0; color: #065f46; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 999px;">{{ t('lbl_sustainable_transition') }}</span>
+            </div>
+
+            <div class="bio-alts-grid">
+              <!-- Bio Alt 1 -->
+              <div class="bio-item">
+                <div class="bio-item-title">{{ result.bio_alternative_1.name }}</div>
+                <div class="bio-item-type">{{ result.bio_alternative_1.category }}</div>
+                <div class="bio-item-detail"><strong>Cost:</strong> {{ result.bio_alternative_1.cost }}</div>
+                <div class="bio-item-detail"><strong>Shelf-Life:</strong> {{ result.bio_alternative_1.shelf_life }}</div>
+                <div class="bio-item-detail"><strong>Barrier:</strong> {{ result.bio_alternative_1.barrier }}</div>
+                <div class="bio-item-detail"><strong>Biodegradability:</strong> {{ result.bio_alternative_1.biodegradability }}</div>
+              </div>
+
+              <!-- Bio Alt 2 -->
+              <div class="bio-item">
+                <div class="bio-item-title">{{ result.bio_alternative_2.name }}</div>
+                <div class="bio-item-type">{{ result.bio_alternative_2.category }}</div>
+                <div class="bio-item-detail"><strong>Cost:</strong> {{ result.bio_alternative_2.cost }}</div>
+                <div class="bio-item-detail"><strong>Shelf-Life:</strong> {{ result.bio_alternative_2.shelf_life }}</div>
+                <div class="bio-item-detail"><strong>Barrier:</strong> {{ result.bio_alternative_2.barrier }}</div>
+                <div class="bio-item-detail"><strong>Biodegradability:</strong> {{ result.bio_alternative_2.biodegradability }}</div>
+              </div>
+            </div>
+
+            <!-- Nuanced Composting Reality (Section 17 requirement) -->
+            <div class="bio-nuance-box">
+              <strong>⚠️ {{ t('bio_nuance_title') }}:</strong>
+              {{ t('bio_nuance_text') }}
+            </div>
+          </div>
+
+          <!-- 6. Impact & Resource Scorecard (3 Large Cards) (Section 19) -->
+          <div class="scorecards-row" id="scorecardRow">
+            <!-- Shelf Life Extension -->
+            <div class="scorecard-item">
+              <span class="scorecard-label">{{ t('card_shelf_life') }}</span>
+              <div class="scorecard-main-val">
+                {{ result.shelf_life_original }}d → {{ result.shelf_life_extended }}d
+              </div>
+              <span class="scorecard-sub">+{{ result.shelf_life_extension_pct }}% {{ t('lbl_freshness_preservation') }}</span>
+            </div>
+
+            <!-- Sustainability Score -->
+            <div class="scorecard-item">
+              <span class="scorecard-label">{{ t('card_sustainability') }}</span>
+              <div class="scorecard-main-val" style="color: #059669;">
+                {{ result.sustainability_score }} / 10
+              </div>
+              <span class="scorecard-sub">{{ result.carbon_impact }}</span>
+            </div>
+
+            <!-- Unit Economics -->
+            <div class="scorecard-item">
+              <span class="scorecard-label">{{ t('card_unit_economics') }}</span>
+              <div class="scorecard-main-val" style="color: var(--navy-accent);">
+                ₹{{ result.unit_cost_inr }}
+              </div>
+              <span class="scorecard-sub">{{ t('lbl_est_packaging_unit_cost') }}</span>
+            </div>
+          </div>
+
+          <!-- Additional Down-Gauging & Plastic Reduction Metrics (Section 19) -->
+          <div class="scorecard-extra-grid">
+            <div class="extra-stat-item">
+              <div class="extra-stat-num">{{ result.plastic_reduction_pct }}%</div>
+              <div class="extra-stat-lbl">{{ t('lbl_plastic_reduction') }}</div>
+            </div>
+            <div class="extra-stat-item">
+              <div class="extra-stat-num">-32% CO₂e</div>
+              <div class="extra-stat-lbl">{{ t('lbl_carbon_impact') }}</div>
+            </div>
+            <div class="extra-stat-item">
+              <div class="extra-stat-num">₹{{ result.unit_cost_inr }}</div>
+              <div class="extra-stat-lbl">{{ t('lbl_packaging_cost') }}</div>
+            </div>
+            <div class="extra-stat-item">
+              <div class="extra-stat-num">{{ t('lbl_downgauged_status') }}</div>
+              <div class="extra-stat-lbl">{{ t('lbl_thickness_reduction') }}</div>
+            </div>
+          </div>
+
+          <!-- 7. Current Packaging vs PackSense Recommendation Table (Section 20) -->
+          <div class="comparison-card" id="comparisonCard">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--deep-navy);">
+              {{ t('cmp_title') }}
+            </h3>
+            <div class="comparison-table-wrapper">
+              <table class="comp-table">
+                <thead>
+                  <tr>
+                    <th>{{ t('cmp_col_param') }}</th>
+                    <th>{{ t('cmp_col_current') }}</th>
+                    <th style="color: var(--primary-green-dark);">{{ t('cmp_col_rec') }}</th>
+                    <th>{{ t('cmp_col_imp') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in result.comparison_table %}
+                    <tr>
+                      <td><strong>{{ row.parameter }}</strong></td>
+                      <td>{{ row.current }}</td>
+                      <td class="col-rec">{{ row.recommended }}</td>
+                      <td><span class="badge-gain">{{ row.improvement }}</span></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 8. Dynamic Smart Insight (Section 21) -->
+          <div class="smart-insight-box" id="smartInsightBox">
+            <div class="insight-icon">💡</div>
+            <div class="insight-content">
+              <h4>{{ t('smart_insight_title') }}</h4>
+              <p>{{ result.smart_insight }}</p>
+            </div>
+          </div>
+          </div><!-- /#workspaceResultsContainer -->
+
+        {% else %}
+          <!-- Empty State Prompt -->
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: var(--radius-md); padding: 3rem 2rem; text-align: center;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="margin-bottom: 1rem;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--deep-navy); margin-bottom: 0.5rem;">Ready to Optimize</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem; font-size: 0.9rem;">
+              Select a food commodity and destination on the left, then click <strong>"Run PackSense AI"</strong> to compute ASTM barrier targets, MAP active gas headspace, down-gauged thickness, and biopolymer alternatives.
+            </p>
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<!-- Interactive Workspace JavaScript for Live Mode Switching & Dropdown Updates -->
+<script>
+  function applyModeAndRecalculate(targetMode) {
+    if (targetMode) {
+      setMode(targetMode);
+    }
+    const form = document.getElementById('analysisForm');
+    if (form) {
+      const mode = document.getElementById('selectedModeInput').value;
+      const quickBtn = document.getElementById('quickApplyRecalcBtn');
+      if (quickBtn) {
+        quickBtn.innerHTML = '⏳ Recalculating ' + (mode === 'industry' ? 'Industry Specs...' : 'Farmer Solutions...');
+        quickBtn.disabled = true;
+      }
+      const runBtn = document.getElementById('runPackSenseBtn');
+      if (runBtn) {
+        runBtn.innerHTML = '⏳ Recalculating Multi-Factor Model...';
+        runBtn.disabled = true;
+      }
+      form.submit();
+    }
+  }
+
+  function setMode(mode) {
+    document.getElementById('selectedModeInput').value = mode;
+    const isIndustry = mode === 'industry';
+    
+    // Toggle Section 13 Industry Advanced Inputs in Channel A
+    const indParams = document.getElementById('industryParamsSection');
+    if (indParams) indParams.style.display = isIndustry ? 'block' : 'none';
+
+    // Toggle Farmer Mode Hint in Channel A
+    const farmerHint = document.getElementById('farmerModeHint');
+    if (farmerHint) farmerHint.style.display = isIndustry ? 'none' : 'block';
+    
+    // Toggle Mode toggle buttons
+    if (isIndustry) {
+      document.getElementById('industryModeBtn').classList.add('active');
+      document.getElementById('farmerModeBtn').classList.remove('active');
+    } else {
+      document.getElementById('farmerModeBtn').classList.add('active');
+      document.getElementById('industryModeBtn').classList.remove('active');
+    }
+
+    // Toggle Workspace Audience Status Badge
+    const activeBadge = document.getElementById('activeModeBadge');
+    if (activeBadge) {
+      if (isIndustry) {
+        activeBadge.innerText = '🔬 Industry / Lab Mode Active';
+        activeBadge.style.background = '#dbeafe';
+        activeBadge.style.color = '#1e40af';
+        activeBadge.style.border = '1px solid #bfdbfe';
+      } else {
+        activeBadge.innerText = '👨‍🌾 Farmer / SME Mode Active';
+        activeBadge.style.background = '#dcfce7';
+        activeBadge.style.color = '#166534';
+        activeBadge.style.border = '1px solid #bbf7d0';
+      }
+    }
+
+    // Interactive Mode Switch Feedback Banner
+    const switchBanner = document.getElementById('modeSwitchBanner');
+    if (switchBanner) {
+      switchBanner.style.display = 'block';
+      if (isIndustry) {
+        switchBanner.style.background = '#eff6ff';
+        switchBanner.style.border = '1px solid #bfdbfe';
+        switchBanner.style.color = '#1e40af';
+        switchBanner.innerHTML = '🔬 <strong>Switched to Industry Mode.</strong> Lab ASTM inputs (Moisture, OTR, WVTR, Seal) are enabled below. Click <a href="javascript:void(0)" onclick="applyModeAndRecalculate()" style="color:#1d4ed8; text-decoration:underline; font-weight:700;">Apply & Recalculate Now ⚡</a> to re-evaluate with ASTM laboratory standards.';
+      } else {
+        switchBanner.style.background = '#f0fdf4';
+        switchBanner.style.border = '1px solid #bbf7d0';
+        switchBanner.style.color = '#15803d';
+        switchBanner.innerHTML = '👨‍🌾 <strong>Switched to Farmer Mode.</strong> Simplified farm and mandi guidance active. Click <a href="javascript:void(0)" onclick="applyModeAndRecalculate()" style="color:#15803d; text-decoration:underline; font-weight:700;">Apply & Recalculate Now ⚡</a> to re-evaluate with low-cost farm solutions.';
+      }
+    }
+
+    // Update Run Engine Button text
+    const runBtn = document.getElementById('runPackSenseBtn');
+    if (runBtn) {
+      runBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> ' + 
+        (isIndustry ? 'Run PackSense Engine (🔬 ASTM Lab & Engineering Specs)' : 'Run PackSense Engine (👨‍🌾 Farmer Mandi Solution)');
+    }
+
+    // Toggle Channel B Text & Prompts
+    const bTitle = document.getElementById('channelBTitleText');
+    const bTag = document.getElementById('channelBModeTag');
+    const bDesc = document.getElementById('channelBDesc');
+    const bUploadTitle = document.getElementById('channelBUploadTitle');
+    const bUploadSub = document.getElementById('channelBUploadSub');
+    
+    if (isIndustry) {
+      if (bTitle) bTitle.innerText = '🔬 Lab Computer Vision & Spectroscopy';
+      if (bTag) {
+        bTag.innerText = 'Industry / Lab Mode';
+        bTag.style.color = '#1e40af';
+        bTag.style.background = '#eff6ff';
+      }
+      if (bDesc) bDesc.innerText = 'Upload high-resolution packaging sample, cross-section microscopy, or pouch surface photo. PackSense AI measures specular glint reflectivity %, optical transmission haze, edge defect gradients, and ASTM F88 seal peel compliance.';
+      if (bUploadTitle) bUploadTitle.innerText = 'Upload Packaging Test Specimen';
+      if (bUploadSub) bUploadSub.innerText = 'High-res microscopy, seal cross-section, or ASTM test pouch';
+    } else {
+      if (bTitle) bTitle.innerText = '👨‍🌾 Quick Photo Scan (Visual PackAudit)';
+      if (bTag) {
+        bTag.innerText = 'Farmer / SME Mode';
+        bTag.style.color = '#15803d';
+        bTag.style.background = '#f0fdf4';
+      }
+      if (bDesc) bDesc.innerText = 'Take a quick mobile phone picture of your farm produce crate, gunny bag, polythene pouch, carton, or punnet. PackSense AI scans for bag tears, water sweat drops, missing ventilation holes, and seal leakage before you ship to the mandi.';
+      if (bUploadTitle) bUploadTitle.innerText = 'Upload Farm Bag, Crate, or Pouch Photo';
+      if (bUploadSub) bUploadSub.innerText = 'Phone photo of gunny sack, polybag, fruit box, or crate';
+    }
+    
+    // Toggle Channel B Analyzed Image Information (Farmer vs Industry)
+    const farmerAudit = document.getElementById('auditResultFarmerView');
+    const indAudit = document.getElementById('auditResultIndustryView');
+    if (farmerAudit) farmerAudit.style.display = isIndustry ? 'none' : 'block';
+    if (indAudit) indAudit.style.display = isIndustry ? 'block' : 'none';
+
+    // Toggle Recommendation Banners (Farmer vs Industry)
+    const recFarmer = document.getElementById('recFarmerModeCard');
+    const recInd = document.getElementById('recIndustryModeCard');
+    if (recFarmer) recFarmer.style.display = isIndustry ? 'none' : 'block';
+    if (recInd) recInd.style.display = isIndustry ? 'block' : 'none';
+  }
+
+  function previewUpload(event) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('imagePreview').src = e.target.result;
+        document.getElementById('imagePreviewContainer').style.display = 'block';
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function handleFoodChange(foodName) {
+    // Dynamic fetch to auto-populate SQL knowledge base values
+    fetch('/api/food/' + encodeURIComponent(foodName))
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.food) {
+          const f = data.food;
+          document.getElementById('dispRespiration').innerText = f.respiration_rate;
+          document.getElementById('dispFatVuln').innerText = f.fat_vulnerability;
+          document.getElementById('dispEthylene').innerText = f.ethylene_emission;
+          document.getElementById('dispMoisture').innerText = f.moisture_sensitivity;
+          document.getElementById('dispMicrobial').innerText = f.microbial_risk;
+          document.getElementById('dispOptTemp').innerText = f.opt_temp_c + '°C';
+        }
+      })
+      .catch(err => console.log('Knowledge base fetch error:', err));
+  }
+</script>
+{% endblock %}

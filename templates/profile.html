@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 3rem auto 5rem; padding: 0 1.5rem;">
+  <div style="background: white; border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-md);">
+    
+    <!-- User Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-card); flex-wrap: wrap; gap: 1rem;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+          {{ (current_user.name[0] if current_user and current_user.name else 'U') }}
+        </div>
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--deep-navy); margin: 0 0 0.25rem;">{{ (current_user.name if current_user and current_user.name else 'PackSense User') }}</h2>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">{{ (current_user.email if current_user and current_user.email else '') }}</span>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <span style="display: inline-block; background: #e0f2fe; color: #0284c7; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;">
+          {{ total_analyses or 0 }} Past Optimizations
+        </span>
+      </div>
+    </div>
+
+    <!-- Edit Profile & Mode Preferences Form -->
+    <form action="{{ url_for('profile', lang=active_lang) }}" method="POST" style="margin-bottom: 2rem;">
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+        ⚙️ Account Settings & Operating Mode
+      </h3>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-input" value="{{ (current_user.name if current_user and current_user.name else 'PackSense User') }}" required>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Default Workspace Operating Mode</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.4rem;">
+          <label style="border: 2px solid {% if not current_user or (current_user.mode or current_user.role) != 'industry' %}#10b981{% else %}#e2e8f0{% endif %}; border-radius: var(--radius-sm); padding: 0.85rem; cursor: pointer; display: flex; align-items: flex-start; gap: 0.6rem; background: {% if not current_user or (current_user.mode or current_user.role) != 'industry' %}#f0fdf4{% else %}#ffffff{% endif %};">
+            <input type="radio" name="mode" value="farmer" {% if not current_user or (current_user.mode or current_user.role) != 'industry' %}checked{% endif %} style="margin-top: 0.2rem;">
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #166534;">👨‍🌾 Farmer / SME Mode</strong>
+              <span style="font-size: 0.785rem; color: #64748b; line-height: 1.3; display: block; margin-top: 0.2rem;">
+                Mandi rot prevention, crate cushioning, and low-cost farm packaging.
+              </span>
+            </div>
+          </label>
+
+          <label style="border: 2px solid {% if current_user and (current_user.mode or current_user.role) == 'industry' %}#2563eb{% else %}#e2e8f0{% endif %}; border-radius: var(--radius-sm); padding: 0.85rem; cursor: pointer; display: flex; align-items: flex-start; gap: 0.6rem; background: {% if current_user and (current_user.mode or current_user.role) == 'industry' %}#eff6ff{% else %}#ffffff{% endif %};">
+            <input type="radio" name="mode" value="industry" {% if current_user and (current_user.mode or current_user.role) == 'industry' %}checked{% endif %} style="margin-top: 0.2rem;">
+            <div>
+              <strong style="display: block; font-size: 0.9rem; color: #1e40af;">🔬 Industry / Lab Mode</strong>
+              <span style="font-size: 0.785rem; color: #64748b; line-height: 1.3; display: block; margin-top: 0.2rem;">
+                ASTM barrier test standards (OTR, WVTR), seal strength, and resin specs.
+              </span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.75rem;">
+        <label class="form-label">Default Interface Language</label>
+        <select name="language" class="form-select">
+          {% for code, lang_item in supported_languages.items() %}
+            <option value="{{ code }}" {% if active_lang == code %}selected{% endif %}>
+              {{ lang_item.country }} - {{ lang_item.native }} ({{ lang_item.name }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        Save Preferences
+      </button>
+    </form>
+
+    <!-- Quick Navigation Links -->
+    <div style="border-top: 1px solid var(--border-card); padding-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+      <a href="{{ url_for('workspace', mode=current_user.mode or 'farmer', lang=active_lang) }}" class="btn btn-secondary" style="flex: 1; min-width: 150px; text-align: center;">
+        Open Workspace
+      </a>
+      <a href="{{ url_for('history', lang=active_lang) }}" class="btn btn-outline" style="flex: 1; min-width: 150px; text-align: center;">
+        Past Reports ({{ total_analyses or 0 }})
+      </a>
+      <a href="{{ url_for('logout', lang=active_lang) }}" class="btn btn-outline" style="flex: 1; min-width: 150px; color: #dc2626; border-color: #fca5a5; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;" onclick="handleLogout(event)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

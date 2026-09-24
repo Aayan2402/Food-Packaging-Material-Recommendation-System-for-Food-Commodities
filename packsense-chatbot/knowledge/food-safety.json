@@ -1,0 +1,76 @@
+{
+  "definitions": {
+    "food_grade": {
+      "definition": "Food-grade packaging refers to materials manufactured, tested, and certified under strict good manufacturing practices (GMP) to be completely non-toxic and chemically inert when in direct contact with food.",
+      "critical_criteria": [
+        "Chemical Inertness: Does not leach or migrate monomers, plasticizers, heavy metals, or volatile organic compounds into the food.",
+        "Organoleptic Preservation: Does not change the taste, odor, aroma, color, or texture of the food commodity.",
+        "Specific Migration Limits (SML): Harmful substances remain strictly below the toxicological safety threshold (IS 9845 testing).",
+        "Application Suitability: Must be certified specifically for the exact food type (aqueous, acidic, alcoholic, fatty/oily, dry) and temperature range (frozen, ambient, microwave, retort sterilization)."
+      ]
+    },
+    "chemical_migration": {
+      "overall_migration": "The total quantity of non-volatile substances transferred from the packaging material into food or food simulants.",
+      "specific_migration": "The quantity of an individual identifiable chemical compound (e.g., Bisphenol A, phthalate, formaldehyde, styrene monomer) transferring into food.",
+      "testing_simulants": [
+        "Simulant A: Distilled water (for neutral aqueous foods)",
+        "Simulant B: 3% Acetic acid (for acidic foods pH < 4.5)",
+        "Simulant C: 10% Ethanol (for alcoholic foods)",
+        "Simulant D: Rectified olive oil or Iso-octane (for fatty and oily foods)"
+      ]
+    }
+  },
+  "commodity_specific_guidelines": {
+    "oily_and_fatty_foods": {
+      "decay_mechanisms": "Lipid peroxidation (free radical chain reaction where unsaturated fats react with oxygen to form hydroperoxides and rancid hexanals), light-induced photo-oxidation, and fat strike-through.",
+      "critical_factors": [
+        "Fat/Oil Content: High (e.g., 20% to 45% in namkeen, potato chips, roasted nuts, fried snacks)",
+        "Temperature: Hot packaging immediately after frying increases plasticizer migration risk",
+        "Barrier Needs: High oxygen barrier (OTR < 1.0 cc/m²/day) and zero light transmission"
+      ],
+      "recommended_packaging": "Multi-layer barrier laminate such as BOPP / Metallized BOPP / Polyethylene with nitrogen (N₂) gas flushing, or food-grade greaseproof paper with bio-wax liner.",
+      "unacceptable_materials": "Plain low-density polyethylene (LDPE), unlined recycled paperboard, or printed newspaper."
+    },
+    "milk_and_dairy": {
+      "decay_mechanisms": "Bacterial proliferation, enzymatic proteolysis, lipolysis, and light-induced photolysis (UV light degrades riboflavin/Vitamin B2, creating singlet oxygen and a cardboard-like oxidized off-flavor within hours).",
+      "critical_factors": [
+        "Water Activity: Very high (aw > 0.98)",
+        "Microbial Sensitivity: High pathogen multiplication risk (Listeria, Salmonella, coliforms)",
+        "Light & Oxygen Sensitivity: Extremely sensitive"
+      ],
+      "recommended_packaging": [
+        "Short-term cold chain (pasteurized milk): 3-layer or 5-layer co-extruded LDPE/LLDPE pouch containing a black carbon inner layer (100% light block) and white outer layer for printing.",
+        "Long-term ambient shelf-stable (UHT milk): 6-layer aseptic brick carton (75% paperboard for structural rigidity, 20% LDPE for liquid seals, 5% aluminum foil for complete oxygen and light barrier)."
+      ],
+      "unacceptable_materials": "Single-layer clear transparent polybags, unsealed non-hermetic bottles, or reused containers."
+    },
+    "acidic_foods_and_pickles": {
+      "decay_mechanisms": "Acidic hydrolysis (pH < 4.0), corrosion of unlined metals leading to tin/iron poisoning, and plasticizer leaching from non-resistant polymers.",
+      "recommended_packaging": "Type III Soda-lime glass jars with acid-resistant plastisol-lined metal lug caps, or multilayer high-barrier retort pouches (PET / Aluminum Foil / Nylon / Cast PP).",
+      "unacceptable_materials": "Uncoated tinplate cans, galvanized iron, ordinary copper/brass vessels, or unverified recycled plastic containers."
+    },
+    "dry_spices_and_powders": {
+      "decay_mechanisms": "Moisture absorption causing caking, microbial mold growth, and volatile essential oil evaporation (loss of pungency, aroma, and curcumin/capsaicin).",
+      "recommended_packaging": "PET / Metallized PET / Polyethylene laminated pouches with high moisture (WVTR < 0.5 g/m²/day) and aroma barriers.",
+      "unacceptable_materials": "Porous jute sacks without inner barrier liner, unlined newsprint, or pinhole-prone single film."
+    }
+  },
+  "frequently_asked_questions": [
+    {
+      "question": "Can newspaper be used to wrap food?",
+      "answer": "No. Under Regulation 3(4) of the Food Safety and Standards (Packaging) Regulations, 2018, using newspaper to wrap, line, serve, or store food is strictly prohibited across India. Newspaper ink contains lead, heavy metals, aromatic hydrocarbons (MOAH), and toxic solvents that penetrate hot or oily foods, creating severe cancer, organ toxicity, and bacterial infection risks. Approved alternatives include certified food-grade greaseproof paper (IS 6615), butter paper, clean banana leaves, or stainless steel."
+    },
+    {
+      "question": "What is food-grade packaging?",
+      "answer": "Food-grade packaging refers to materials specifically certified under Indian Standards (BIS) to be safe for direct food contact. It must not leach harmful chemical constituents into food, must not exceed overall migration limits of 60 mg/kg (IS 9845), must not alter food flavor or odor, and must be suitable for the specific acidity, fat, moisture, and temperature of the intended food product."
+    },
+    {
+      "question": "Which packaging is suitable for oily food?",
+      "answer": "Oily foods require packaging that prevents oil staining, blocks atmospheric oxygen to prevent rancidity, and shields against UV light. The primary recommendation is a high-barrier Metallized BOPP / Polyethylene pouch with nitrogen flush, or food-grade greaseproof paper (IS 6615) for immediate hot service. Never use newspaper or plain thin polybags."
+    },
+    {
+      "question": "What packaging is suitable for milk?",
+      "answer": "Milk is highly sensitive to light-induced oxidation (riboflavin breakdown) and bacterial spoilage. For fresh pasteurized milk (cold chain), multi-layer co-extruded LDPE/LLDPE pouches with a light-blocking black inner layer are standard. For long-life ambient milk, 6-layer aseptic cartons (paperboard + aluminum foil + polyethylene) provide complete sterility and barrier against oxygen and light."
+    }
+  ]
+}

@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Modern Hero Section with Visual Inspiration from Reference 2 -->
+<section class="hero-section" id="heroSection">
+  <div class="hero-container">
+    <!-- Left Hero Typography -->
+    <div class="hero-text-block">
+      <div class="hero-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        SMART PACKAGING • HEALTHIER FOOD • BRIGHTER TOMORROW
+      </div>
+
+      <h1 class="hero-title">
+        <span style="color: #0b2238;">Pack</span><span style="color: #15803d;">Sens<span style="position: relative; display: inline-block;">e<svg width="14" height="14" viewBox="0 0 10 10" style="position: absolute; top: 2px; right: -2px;"><path d="M1 9 C1 4 4 1 9 1 C9 6 6 9 1 9 Z" fill="#22c55e"/></svg></span></span> <span class="brand-ai-badge" style="background: #000000 !important; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; padding: 0.15rem 0.65rem; border-radius: 8px; font-size: 0.72em; vertical-align: middle; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45); font-weight: 900; letter-spacing: 0.5px;">AI</span><br>
+        {{ t('hero_title') }}
+      </h1>
+
+      <p class="hero-subtitle">
+        {{ t('hero_subtitle') }}
+      </p>
+
+      <div class="hero-actions">
+        <a href="{{ url_for('workspace', lang=active_lang) }}" class="btn btn-primary btn-lg" id="heroStartAnalysisBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {{ t('btn_start_analysis') }}
+        </a>
+        <a href="{{ url_for('packaudit', lang=active_lang) }}" class="btn btn-secondary btn-lg" id="heroPackAuditBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          {{ t('btn_packaudit') }}
+        </a>
+        <a href="{{ url_for('about', lang=active_lang) }}" class="btn btn-outline btn-lg" id="heroLearnMoreBtn">
+          {{ t('btn_learn_more') }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Hero Visual Card (Matching Official PackSense AI Logo with Natural Light Background) -->
+    <div class="hero-visual-card" id="heroVisualCard" style="background: linear-gradient(145deg, #f0fdf4 0%, #ffffff 50%, #f8fafc 100%); border: 1px solid #dcfce7; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08);">
+      <div class="hero-visual-header" style="border-bottom: 1px solid #e2e8f0;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
+          <span style="font-size: 0.85rem; font-weight: 700; color: #0b2238;">PACKSENSE AI OFFICIAL ENGINE</span>
+        </div>
+        <span class="hero-visual-tag" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;">Real-Time Model</span>
+      </div>
+
+      <div style="padding: 1.5rem; text-align: center;">
+        <img src="{{ url_for('static', filename='img/packsense_logo.svg') }}" alt="PackSense AI" style="max-width: 320px; width: 100%; height: auto; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.06));" class="hero-brand-emblem">
+      </div>
+
+      <!-- Quick Live Metrics -->
+      <div class="hero-art-metrics" style="background: #ffffff; border-top: 1px solid #e2e8f0;">
+        <div class="hero-metric-item">
+          <div class="hero-metric-value" style="color: #15803d;">+200%</div>
+          <div class="hero-metric-label" style="color: #64748b;">Shelf-Life Extended</div>
+        </div>
+        <div class="hero-metric-item">
+          <div class="hero-metric-value" style="color: #0284c7;">-60%</div>
+          <div class="hero-metric-label" style="color: #64748b;">Plastic Footprint</div>
+        </div>
+        <div class="hero-metric-item">
+          <div class="hero-metric-value" style="color: #0b2238;">ASTM</div>
+          <div class="hero-metric-label" style="color: #64748b;">Calibrated Standards</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Feature Cards Below Hero -->
+<section class="features-section" id="featuresSection">
+  <div class="feature-grid">
+    <!-- Card 1: AI Packaging Recommendation -->
+    <div class="feature-card" id="featRecCard">
+      <div class="feature-icon-wrapper">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3 class="feature-card-title">{{ t('feat_recommendation_title') }}</h3>
+      <p class="feature-card-desc">{{ t('feat_recommendation_desc') }}</p>
+      <a href="{{ url_for('workspace', lang=active_lang) }}" style="color: var(--primary-green-dark); font-weight: 700; font-size: 0.85rem; text-decoration: none; margin-top: auto;">Explore Workspace →</a>
+    </div>
+
+    <!-- Card 2: Visual PackAudit -->
+    <div class="feature-card" id="featAuditCard">
+      <div class="feature-icon-wrapper" style="background: #e0f2fe; color: #0284c7;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h3 class="feature-card-title">{{ t('feat_packaudit_title') }}</h3>
+      <p class="feature-card-desc">{{ t('feat_packaudit_desc') }}</p>
+      <a href="{{ url_for('packaudit', lang=active_lang) }}" style="color: #0284c7; font-weight: 700; font-size: 0.85rem; text-decoration: none; margin-top: auto;">Audit Packaging →</a>
+    </div>
+
+    <!-- Card 3: India Climate & Route -->
+    <div class="feature-card" id="featClimateCard">
+      <div class="feature-icon-wrapper" style="background: #fef3c7; color: #d97706;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+      </div>
+      <h3 class="feature-card-title">{{ t('feat_climate_title') }}</h3>
+      <p class="feature-card-desc">{{ t('feat_climate_desc') }}</p>
+      <a href="{{ url_for('workspace', lang=active_lang) }}" style="color: #d97706; font-weight: 700; font-size: 0.85rem; text-decoration: none; margin-top: auto;">Simulate Corridors →</a>
+    </div>
+
+    <!-- Card 4: Green Packaging Alternatives -->
+    <div class="feature-card" id="featGreenCard">
+      <div class="feature-icon-wrapper" style="background: #ecfdf5; color: #059669;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+      </div>
+      <h3 class="feature-card-title">{{ t('feat_green_title') }}</h3>
+      <p class="feature-card-desc">{{ t('feat_green_desc') }}</p>
+      <a href="{{ url_for('workspace', lang=active_lang) }}" style="color: #059669; font-weight: 700; font-size: 0.85rem; text-decoration: none; margin-top: auto;">Compare Biopolymers →</a>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE COMMODITY QUICK SIMULATOR SECTION -->
+<section style="max-width: 1280px; margin: 1rem auto 4.5rem; padding: 0 1.5rem;">
+  <div style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 1.5px solid var(--border-card); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm);">
+    
+    <div style="text-align: center; max-width: 760px; margin: 0 auto 2rem;">
+      <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: #dcfce7; color: #166534; padding: 0.3rem 0.8rem; border-radius: 999px; font-size: 0.785rem; font-weight: 800; margin-bottom: 0.75rem;">
+        ⚡ INSTANT BIOCHEMICAL SIMULATOR
+      </div>
+      <h2 style="font-size: 2rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+        Select a Commodity to Test Real-Time Barrier Matching
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+        Click any commodity below to preview how PackSense AI matches biochemical decay kinetics with barrier chemistry, extending shelf life while lowering cost.
+      </p>
+
+      <!-- Commodity Selector Pills -->
+      <div style="display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.5rem;">
+        <button type="button" class="btn btn-outline btn-sm quick-sim-btn active" onclick="simulateCommodity('strawberry', this)" style="border-radius: 999px; font-weight: 700; padding: 0.4rem 1rem;">
+          🍓 Fresh Strawberry
+        </button>
+        <button type="button" class="btn btn-outline btn-sm quick-sim-btn" onclick="simulateCommodity('mango', this)" style="border-radius: 999px; font-weight: 700; padding: 0.4rem 1rem;">
+          🥭 Alphonso Mango
+        </button>
+        <button type="button" class="btn btn-outline btn-sm quick-sim-btn" onclick="simulateCommodity('chips', this)" style="border-radius: 999px; font-weight: 700; padding: 0.4rem 1rem;">
+          🥔 Potato Chips / Namkeen
+        </button>
+        <button type="button" class="btn btn-outline btn-sm quick-sim-btn" onclick="simulateCommodity('paneer', this)" style="border-radius: 999px; font-weight: 700; padding: 0.4rem 1rem;">
+          🧀 Fresh Dairy Paneer
+        </button>
+        <button type="button" class="btn btn-outline btn-sm quick-sim-btn" onclick="simulateCommodity('grapes', this)" style="border-radius: 999px; font-weight: 700; padding: 0.4rem 1rem;">
+          🍇 Table Grapes
+        </button>
+      </div>
+    </div>
+
+    <!-- Dynamic Simulation Result Card -->
+    <div id="quickSimDisplay" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; align-items: center;">
+        
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <span id="simBadge" style="background: #fee2e2; color: #991b1b; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px;">
+              High Respiration Rate
+            </span>
+            <span id="simCategory" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Fresh Perishable Produce</span>
+          </div>
+          <h3 id="simTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.5rem;">
+            🍓 Fresh Strawberries (Fragaria × ananassa)
+          </h3>
+          <p id="simDecayHazard" style="font-size: 0.88rem; color: #475569; line-height: 1.5; margin-bottom: 1rem;">
+            Rapid transpiration creates condensation sweat drops that germinate gray mold (Botrytis cinerea). Standard airtight polybags cause immediate anaerobic off-odors and tissue collapse.
+          </p>
+          <div style="background: #f8fafc; border-left: 4px solid #10b981; padding: 0.75rem 1rem; border-radius: 4px; font-size: 0.85rem; color: #0f172a;">
+            <strong>AI Recommended Solution:</strong> <span id="simMaterial">Macro/Micro-Perforated PET Punnet with Anti-Fog Hydrophilic Coating (1800 cc/m²/day OTR)</span>
+          </div>
+        </div>
+
+        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: var(--radius-sm); padding: 1.5rem; text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #166534; text-transform: uppercase; margin-bottom: 0.5rem;">
+            Shelf-Life Performance Gain
+          </div>
+          <div style="display: flex; justify-content: center; align-items: baseline; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <span id="simShelfOld" style="font-size: 1.35rem; font-weight: 700; color: #94a3b8; text-decoration: line-through;">3 Days</span>
+            <span style="font-size: 1.2rem; color: #15803d; font-weight: 800;">→</span>
+            <span id="simShelfNew" style="font-size: 2.2rem; font-weight: 900; color: #15803d;">9 Days</span>
+          </div>
+          <div id="simExtensionBadge" style="display: inline-block; background: #166534; color: white; font-size: 0.85rem; font-weight: 800; padding: 0.25rem 0.85rem; border-radius: 999px; margin-bottom: 1.25rem;">
+            +200% Shelf-Life Extension
+          </div>
+
+          <div style="display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
+            <a id="simFarmerBtn" href="{{ url_for('workspace', food='Strawberry', mode='farmer', lang=active_lang) }}" class="btn btn-secondary btn-sm" style="flex: 1; min-width: 140px;">
+              👨‍🌾 Launch Farmer Mode
+            </a>
+            <a id="simIndustryBtn" href="{{ url_for('workspace', food='Strawberry', mode='industry', lang=active_lang) }}" class="btn btn-primary btn-sm" style="flex: 1; min-width: 140px;">
+              🔬 Launch Industry Mode
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL MODE ARCHITECTURE SHOWCASE SECTION -->
+<section style="max-width: 1280px; margin: 0 auto 5rem; padding: 0 1.5rem;">
+  <div style="text-align: center; max-width: 760px; margin: 0 auto 2.5rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: #e0f2fe; color: #0284c7; padding: 0.3rem 0.8rem; border-radius: 999px; font-size: 0.785rem; font-weight: 800; margin-bottom: 0.75rem;">
+      DUAL-AUDIENCE ARCHITECTURE
+    </div>
+    <h2 style="font-size: 2rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+      Tailored for Farmers & Mandis • Certified for ASTM Lab Engineers
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+      PackSense AI adapts seamlessly depending on who is using it. No complex jargon for rural growers; exhaustive ASTM & rheology specs for polymer engineers.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+    <!-- Farmer Mode Card -->
+    <div style="background: #ffffff; border: 2px solid #86efac; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 8px 24px rgba(22, 101, 52, 0.06); display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+        <span style="font-size: 1.25rem; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 0.5rem;">
+          👨‍🌾 Farmer / SME Mandi Mode
+        </span>
+        <span style="background: #dcfce7; color: #166534; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 999px;">
+          Zero Jargon
+        </span>
+      </div>
+      <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
+        Engineered specifically for Indian farmers, FPOs, and rural packing sheds. Provides practical, affordable packing actions that save produce from transit rot before reaching the APMC mandi.
+      </p>
+      
+      <ul style="list-style: none; padding: 0; margin: 0 0 1.75rem; font-size: 0.88rem; color: #1f2937; line-height: 1.8;">
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #10b981; font-weight: 800;">✓</span> <strong>Mandi Profit Protection:</strong> Prevents ₹1,500 – ₹3,500/quintal dumping losses.
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #10b981; font-weight: 800;">✓</span> <strong>Ventilation Guidance:</strong> Punch 6-8 holes in polythene bags to prevent transit sweat rot.
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #10b981; font-weight: 800;">✓</span> <strong>Crate Lining & Paper Cushions:</strong> Inexpensive shock absorbing to eliminate bruise rot.
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="color: #10b981; font-weight: 800;">✓</span> <strong>21 Indian & Global Languages:</strong> Accessible in Hindi, Marathi, Gujarati, Punjabi, etc.
+        </li>
+      </ul>
+
+      <a href="{{ url_for('workspace', mode='farmer', lang=active_lang) }}" class="btn btn-secondary" style="margin-top: auto; width: 100%; text-align: center;">
+        Explore Farmer Mode Workspace →
+      </a>
+    </div>
+
+    <!-- Industry / Lab Mode Card -->
+    <div style="background: #ffffff; border: 2px solid #93c5fd; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 8px 24px rgba(30, 64, 175, 0.06); display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+        <span style="font-size: 1.25rem; font-weight: 800; color: #1e40af; display: flex; align-items: center; gap: 0.5rem;">
+          🔬 Industry / ASTM Lab Mode
+        </span>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.65rem; border-radius: 999px;">
+          ASTM Standards
+        </span>
+      </div>
+      <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
+        Formulated for packaging converters, quality control food technologists, and FMCG brands requiring rigorous ASTM testing targets, barrier chemistry, and polymer down-gauging specs.
+      </p>
+
+      <ul style="list-style: none; padding: 0; margin: 0 0 1.75rem; font-size: 0.88rem; color: #1f2937; line-height: 1.8;">
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #2563eb; font-weight: 800;">✓</span> <strong>ASTM D3985 OTR Calibration:</strong> Precision oxygen permeability modeling in cc/m²/day.
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #2563eb; font-weight: 800;">✓</span> <strong>ASTM F1249 WVTR Tuning:</strong> Water vapor transmission targets under 38°C / 90% RH.
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem;">
+          <span style="color: #2563eb; font-weight: 800;">✓</span> <strong>ASTM F88 Hermetic Seal Rheology:</strong> Dwell time, temperature, and peel strength (N/15mm).
+        </li>
+        <li style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="color: #2563eb; font-weight: 800;">✓</span> <strong>Active Gas MAP Equilibrium:</strong> Precise Headspace O₂ / CO₂ / N₂ percentages.
+        </li>
+      </ul>
+
+      <a href="{{ url_for('workspace', mode='industry', lang=active_lang) }}" class="btn btn-primary" style="margin-top: auto; width: 100%; text-align: center;">
+        Explore Industry Mode Workspace →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- REAL-TIME HIGHWAY CORRIDOR TRANSIT STRESS SIMULATION SECTION -->
+<section style="max-width: 1280px; margin: 0 auto 5rem; padding: 0 1.5rem;">
+  <div style="background: #0f172a; border-radius: var(--radius-lg); padding: 2.5rem; color: #ffffff; box-shadow: 0 12px 36px rgba(15, 23, 42, 0.25);">
+    <div style="text-align: center; max-width: 760px; margin: 0 auto 2.5rem;">
+      <span style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.75rem; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase;">
+        INDIAN AGRO-LOGISTICS CORRIDOR STRESS ENGINE
+      </span>
+      <h2 style="font-size: 2rem; font-weight: 800; color: #ffffff; margin-top: 0.6rem; margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+        Dynamic Barrier Multipliers for Real Indian Highway Corridors
+      </h2>
+      <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
+        Standard packaging fails on Indian highways due to intense heat waves, monsoon humidity surges, and unpaved transit vibration. PackSense AI tightens film gauges to survive real transit conditions.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      <!-- Corridor 1: Pune -> Chennai -->
+      <div style="background: #1e293b; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+          <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">Pune → Chennai</span>
+          <span style="background: #f43f5e; color: white; font-size: 0.7rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 999px;">85% High Stress</span>
+        </div>
+        <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.75rem;">1,143 km • 4 Days Transit • Monsoon</div>
+        <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 1rem;">
+          Extreme coastal humidity (RH > 88%) degrades standard single-layer polyolefins. PackSense AI tightens WVTR barrier by 1.56x.
+        </p>
+        <a href="{{ url_for('workspace', food='Strawberry', lang=active_lang) }}" style="color: #4ade80; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Simulate This Route →</a>
+      </div>
+
+      <!-- Corridor 2: Nashik -> Delhi -->
+      <div style="background: #1e293b; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+          <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">Nashik → Delhi</span>
+          <span style="background: #f59e0b; color: white; font-size: 0.7rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 999px;">72% Mod Stress</span>
+        </div>
+        <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.75rem;">1,420 km • 5 Days Transit • Summer</div>
+        <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 1rem;">
+          Intense northern heat waves (43°C ambient) accelerate respiration and moisture loss in grapes and onions. Mandates micro-perforations with anti-fog.
+        </p>
+        <a href="{{ url_for('workspace', food='Alphonso Mango', lang=active_lang) }}" style="color: #4ade80; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Simulate This Route →</a>
+      </div>
+
+      <!-- Corridor 3: Nagpur -> Mumbai -->
+      <div style="background: #1e293b; border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid #334155;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+          <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">Nagpur → Mumbai</span>
+          <span style="background: #10b981; color: white; font-size: 0.7rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 999px;">54% Safe Corridor</span>
+        </div>
+        <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.75rem;">810 km • 2 Days Transit • Winter</div>
+        <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 1rem;">
+          Moderate highway transit with stable temperatures. Allows cost-optimized down-gauging from 60 microns to 40 microns with zero breakage risk.
+        </p>
+        <a href="{{ url_for('workspace', food='Potato Chips', lang=active_lang) }}" style="color: #4ade80; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Simulate This Route →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive Script for Quick Simulator -->
+<script>
+  const commodityData = {
+    strawberry: {
+      name: "🍓 Fresh Strawberries (Fragaria × ananassa)",
+      badge: "High Respiration Rate",
+      badgeColor: "#fee2e2",
+      badgeTextColor: "#991b1b",
+      category: "Fresh Perishable Produce",
+      hazard: "Rapid transpiration creates condensation sweat drops that germinate gray mold (Botrytis cinerea). Standard airtight polybags cause immediate anaerobic off-odors and tissue collapse.",
+      material: "Macro/Micro-Perforated PET Punnet with Anti-Fog Hydrophilic Coating (1800 cc/m²/day OTR)",
+      shelfOld: "3 Days",
+      shelfNew: "9 Days",
+      extension: "+200% Shelf-Life Extension",
+      foodParam: "Strawberry"
+    },
+    mango: {
+      name: "🥭 Alphonso Mango (Mangifera indica)",
+      badge: "Climacteric Ethylene Surge",
+      badgeColor: "#fef3c7",
+      badgeTextColor: "#92400e",
+      category: "Tropical Fruit Produce",
+      hazard: "Ethylene spike causes premature skin blackening and pulp softening. Trapped humidity causes stem-end rot during long-haul interstate truck haulage.",
+      material: "Ventilated Corrugated Master Carton with Food-Grade Kraft Paper Separation Cushions",
+      shelfOld: "5 Days",
+      shelfNew: "14 Days",
+      extension: "+180% Shelf-Life Extension",
+      foodParam: "Alphonso Mango"
+    },
+    chips: {
+      name: "🥔 Potato Chips & Namkeen",
+      badge: "High Lipid Oxidation (35% Fat)",
+      badgeColor: "#fef3c7",
+      badgeTextColor: "#78350f",
+      category: "Fried Snack Foods",
+      hazard: "Free fats react rapidly with atmospheric oxygen and light, producing rancid hexanal off-flavors and limp, unpalatable texture within days without barrier packaging.",
+      material: "Metallized BOPP / Nitrogen Gas Flush Pouch with Near-Zero OTR & UV Barrier",
+      shelfOld: "30 Days",
+      shelfNew: "180 Days",
+      extension: "+500% Shelf-Life Extension",
+      foodParam: "Potato Chips"
+    },
+    paneer: {
+      name: "🧀 Fresh Dairy Paneer",
+      badge: "High Water Activity (aw > 0.98)",
+      badgeColor: "#e0f2fe",
+      badgeTextColor: "#0369a1",
+      category: "Perishable Dairy",
+      hazard: "High moisture and neutral pH invite psychrotrophic bacterial spoilage and mold slime. Ambient oxygen exposure triggers rapid souring within 48 hours.",
+      material: "Multilayer Barrier Thermoformed Vacuum Skin (EVOH/PE) with MAP Gas Flush",
+      shelfOld: "2 Days",
+      shelfNew: "12 Days",
+      extension: "+500% Shelf-Life Extension",
+      foodParam: "Paneer"
+    },
+    grapes: {
+      name: "🍇 Fresh Table Grapes",
+      badge: "Berry Shatter & Botrytis Risk",
+      badgeColor: "#f3e8ff",
+      badgeTextColor: "#6b21a8",
+      category: "Export Fruit Produce",
+      hazard: "Stem drying, rachis browning, and fungal mold spores spread quickly across bunches without adequate sulfur dioxide padding and ventilated airflow.",
+      material: "Dual-Release SO₂ Generator Pouch with Micro-Perforated BOPP Liner",
+      shelfOld: "7 Days",
+      shelfNew: "28 Days",
+      extension: "+300% Shelf-Life Extension",
+      foodParam: "Grapes"
+    }
+  };
+
+  function simulateCommodity(key, btnElement) {
+    const data = commodityData[key];
+    if (!data) return;
+
+    // Toggle active state on pills
+    document.querySelectorAll('.quick-sim-btn').forEach(b => {
+      b.classList.remove('active');
+      b.style.background = 'transparent';
+      b.style.color = 'inherit';
+    });
+    if (btnElement) {
+      btnElement.classList.add('active');
+      btnElement.style.background = 'var(--primary-green-dark)';
+      btnElement.style.color = '#ffffff';
+    }
+
+    // Update DOM
+    document.getElementById('simTitle').innerText = data.name;
+    document.getElementById('simBadge').innerText = data.badge;
+    document.getElementById('simBadge').style.background = data.badgeColor;
+    document.getElementById('simBadge').style.color = data.badgeTextColor;
+    document.getElementById('simCategory').innerText = data.category;
+    document.getElementById('simDecayHazard').innerText = data.hazard;
+    document.getElementById('simMaterial').innerText = data.material;
+    document.getElementById('simShelfOld').innerText = data.shelfOld;
+    document.getElementById('simShelfNew').innerText = data.shelfNew;
+    document.getElementById('simExtensionBadge').innerText = data.extension;
+
+    // Update action URLs
+    const farmerBtn = document.getElementById('simFarmerBtn');
+    const indBtn = document.getElementById('simIndustryBtn');
+    const activeLang = "{{ active_lang }}";
+    if (farmerBtn) farmerBtn.href = "/workspace?food=" + encodeURIComponent(data.foodParam) + "&mode=farmer&lang=" + activeLang;
+    if (indBtn) indBtn.href = "/workspace?food=" + encodeURIComponent(data.foodParam) + "&mode=industry&lang=" + activeLang;
+  }
+</script>
+{% endblock %}

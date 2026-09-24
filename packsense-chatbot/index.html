@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PackSense AI – Food Safety Assistant | FSSAI & FDA Packaging Requirements</title>
+  <meta name="description" content="AI-assisted educational chatbot for Food Safety, Food Packaging, FSSAI 2018 regulations, and Maharashtra FDA context.">
+  <link rel="stylesheet" href="/packsense-chatbot/chatbot.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 1.5rem 1rem;
+      background: #0b1626;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .back-home-bar {
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-home-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.15s ease;
+    }
+    .back-home-link:hover {
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-home-bar">
+    <a href="/" class="back-home-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Back to PackSense AI Home</span>
+    </a>
+    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Educational & Preliminary Guidance</span>
+  </div>
+
+  <div class="packsense-chat-layout" style="width: 100%; height: 86vh;">
+    <!-- Chat Header -->
+    <div class="packsense-chat-header">
+      <div class="chat-header-brand">
+        <div class="chat-bot-avatar">🤖</div>
+        <div class="chat-title-group">
+          <h2>PackSense AI – Food Safety Assistant</h2>
+          <p>“Ask about Food Packaging, FSSAI & FDA Food-Safety Requirements”</p>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button type="button" class="chat-action-btn" id="chatWizardBtn" title="Launch Packaging Recommendation Wizard">
+          <span>⚡</span>
+          <span>12-Factor Wizard</span>
+        </button>
+        <button type="button" class="chat-action-btn" id="chatSourcesBtn" title="View Official FSSAI & FDA Sources">
+          <span>📚</span>
+          <span>Official Sources</span>
+        </button>
+        <button type="button" class="chat-action-btn" id="chatClearBtn" title="Clear Conversation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span>Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Suggested Questions Horizontal Bar -->
+    <div class="chat-suggested-bar" id="chatSuggestedBar"></div>
+
+    <!-- Chat Messages Scrollable Window -->
+    <div class="chat-messages-scroll" id="chatMessagesScroll"></div>
+
+    <!-- Input Form -->
+    <div class="chat-input-container">
+      <form class="chat-input-form" id="chatInputForm">
+        <input 
+          type="text" 
+          id="chatTextInput" 
+          class="chat-text-input" 
+          placeholder="Ask a question about food packaging safety, FSSAI rules, oily food, milk, or newspaper bans..." 
+          autocomplete="off"
+          required
+        >
+        <button type="submit" class="chat-send-btn" id="chatSendBtn">
+          <span>Send</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer Disclaimer -->
+    <div class="chat-footer-disclaimer">
+      PackSense AI provides AI-assisted educational information and preliminary food-packaging recommendations. It is not an official FSSAI or Maharashtra FDA system and does not provide regulatory approval, certification or legal advice. Always verify applicable regulations and food-contact requirements using current official sources before making commercial packaging decisions.
+    </div>
+  </div>
+
+  <!-- Sources Modal -->
+  <div class="chat-modal-backdrop" id="chatSourcesModal">
+    <div class="chat-modal-content">
+      <button type="button" class="chat-modal-close" title="Close">&times;</button>
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <span style="font-size: 1.5rem;">📚</span>
+        <h3 style="margin: 0; color: #0f172a; font-size: 1.2rem; font-weight: 800;">Official Regulatory Sources</h3>
+      </div>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+        PackSense AI strictly cites verified statutory gazette notifications, parliamentary acts, and government portals:
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h4 style="margin: 0 0 0.25rem; font-size: 0.92rem; color: #0f172a; font-weight: 800;">
+            1. FSSAI Packaging Regulations, 2018 (Official Gazette)
+          </h4>
+          <p style="font-size: 0.8rem; color: #475569; margin: 0 0 0.5rem;">
+            Notified under Section 92 of FSS Act, 2006. Mandates food-grade compliance, Overall Migration Limit (IS 9845), and explicitly prohibits the use of newspaper and recycled plastics for food contact.
+          </p>
+          <a href="https://www.fssai.gov.in" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-size: 0.785rem; font-weight: 700; text-decoration: none;">
+            Visit FSSAI Official Portal (fssai.gov.in) &rarr;
+          </a>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h4 style="margin: 0 0 0.25rem; font-size: 0.92rem; color: #0f172a; font-weight: 800;">
+            2. Maharashtra Food and Drug Administration (FDA)
+          </h4>
+          <p style="font-size: 0.8rem; color: #475569; margin: 0 0 0.5rem;">
+            State-level enforcement body responsible for surveillance, food sampling, seizing adulterated goods, and enforcing FSSAI hygiene rules across Maharashtra.
+          </p>
+          <a href="https://fda.maharashtra.gov.in" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-size: 0.785rem; font-weight: 700; text-decoration: none;">
+            Visit FDA Maharashtra Portal (fda.maharashtra.gov.in) &rarr;
+          </a>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <h4 style="margin: 0 0 0.25rem; font-size: 0.92rem; color: #0f172a; font-weight: 800;">
+            3. Bureau of Indian Standards (BIS) Food Contact Specifications
+          </h4>
+          <p style="font-size: 0.8rem; color: #475569; margin: 0 0 0.5rem;">
+            Indian Standards for plastics (IS 10146, IS 10910, IS 12252), greaseproof paper (IS 6615), glass containers (IS 1382), and tinplate (IS 1997).
+          </p>
+          <a href="https://standardsbis.bsbedge.com" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-size: 0.785rem; font-weight: 700; text-decoration: none;">
+            Visit BIS Standards Repository &rarr;
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button type="button" class="modal-close-trigger" style="background: #0b1626; color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 6px; font-weight: 700; cursor: pointer;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12-Factor Wizard Modal -->
+  <div class="chat-modal-backdrop" id="chatWizardModal">
+    <div class="chat-modal-content" style="max-width: 680px;">
+      <button type="button" class="chat-modal-close" title="Close">&times;</button>
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.5rem;">⚡</span>
+        <h3 style="margin: 0; color: #0f172a; font-size: 1.2rem; font-weight: 800;">
+          Packaging Recommendation Engine (12-Factor Analysis)
+        </h3>
+      </div>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+        Provide your food product's chemical and logistical profile for an instant AI-Assisted Preliminary Packaging Recommendation.
+      </p>
+
+      <form id="chatWizardForm" onsubmit="window.submitPackSenseWizard(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div style="grid-column: span 2;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">
+              1. Food / Product Name
+            </label>
+            <input type="text" name="foodName" placeholder="e.g. Potato Chips, Fresh Paneer, Table Grapes" class="chat-text-input" style="width: 100%; box-sizing: border-box;" required>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">2. Moisture Level</label>
+            <select name="moistureLevel" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Dry (< 10%)">Dry (&lt; 10%)</option>
+              <option value="Semi-moist (10-40%)">Semi-moist (10-40%)</option>
+              <option value="High Moisture / Liquid (> 50%)">High Moisture / Liquid (&gt; 50%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">3. Fat / Oil Content</label>
+            <select name="fatContent" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Low / Negligible">Low / Negligible</option>
+              <option value="Moderate (5-15%)">Moderate (5-15%)</option>
+              <option value="High Fat / Fried (> 20%)">High Fat / Fried (&gt; 20%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">4. Acidity / pH</label>
+            <select name="acidity" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Neutral (pH 6-7)">Neutral (pH 6-7)</option>
+              <option value="Mild Acidic (pH 4.5-6)">Mild Acidic (pH 4.5-6)</option>
+              <option value="High Acid / Pickled (pH < 4.5)">High Acid / Pickled (pH &lt; 4.5)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">5. Oxygen Sensitivity</label>
+            <select name="oxygenSensitivity" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Low">Low</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Extreme (Rancidity / Enzymatic Browning)">Extreme (Rancidity / Browning)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">6. Light Sensitivity</label>
+            <select name="lightSensitivity" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Not Sensitive">Not Sensitive</option>
+              <option value="Moderate">Moderate</option>
+              <option value="High (UV Degradation / Photolysis)">High (UV / Photolysis)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">7. Storage Conditions</label>
+            <select name="storageCondition" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Ambient Room Temp (25-35°C)">Ambient Room Temp (25-35°C)</option>
+              <option value="Cold Chain (2-8°C)">Cold Chain (2-8°C)</option>
+              <option value="Frozen (-18°C)">Frozen (-18°C)</option>
+            </select>
+          </div>
+
+          <div style="grid-column: span 2;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">8. Sustainability & Material Goal</label>
+            <select name="sustainability" class="chat-text-input" style="width: 100%; box-sizing: border-box;">
+              <option value="Standard Barrier Performance (Maximum Shelf Life)">Standard High-Barrier (Max Shelf Life)</option>
+              <option value="Down-gauged Recycled Polymer (-25% Material)">Down-gauged Polyolefin (-25% Resin)</option>
+              <option value="Compostable / Bio-based Barrier">Compostable / Bio-based Barrier</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="modal-close-trigger" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 0.6rem 1.25rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            Cancel
+          </button>
+          <button type="submit" class="chat-send-btn">
+            Generate AI Recommendation &rarr;
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/packsense-chatbot/chatbot-config.js"></script>
+  <script src="/packsense-chatbot/chatbot.js"></script>
+</body>
+</html>
