@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
@@ -18,3 +19,7 @@ View your app in AI Studio: https://ai.studio/apps/b1a81eaa-2b40-4f92-8e03-941a2
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+=======
+# Food-Packaging-Material-Recommendation-System-for-Food-Commodities
+PackSense is an AI-driven team building an intelligent food packaging recommendation system to select suitable packaging materials based on food type, shelf life, safety, storage conditions, and sustainability. 
+>>>>>>> 6ffba181ceb6710edb79e4a576d7ac9883c45266
